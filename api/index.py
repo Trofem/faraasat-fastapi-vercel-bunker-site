@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from sys import version as python_formatted_version
 from fastapi.responses import HTMLResponse
 from datetime import datetime, timedelta
@@ -28,6 +28,11 @@ async def root():
 @app.get("/r")
 async def root():
     return {"redis_ping": [i.decode("utf-8") for i in r.smembers('mylist')] }    
+
+@app.get("/r_add")
+async def r_add(request: Request):
+    params = request.query_params
+    return {"params": params }    
 
 
 @app.get("/html", response_class=HTMLResponse)
