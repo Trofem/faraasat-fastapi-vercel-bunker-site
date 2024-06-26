@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from sys import version as python_formatted_version
 from fastapi.responses import HTMLResponse
@@ -5,6 +6,8 @@ from datetime import datetime, timedelta
 import redis
 
 app = FastAPI()
+
+KV_USERNAME = os.environ.get('KV_USERNAME')
 
 @app.get("/")
 async def root():
@@ -22,4 +25,4 @@ async def root():
         <body>
             <h1>Look me! HTMLResponse!</h1>
         </body>
-    </html> """+'@python '+str(python_formatted_version)
+    </html> """+'@python '+str(python_formatted_version)+str(KV_USERNAME)
