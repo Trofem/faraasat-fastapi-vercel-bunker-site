@@ -8,7 +8,7 @@ app = FastAPI()
 @app.get("/")
 async def root():
     utc = datetime.utcnow()
-    return {"time:": format(utc+timedelta(hours=11))}    # make GMT+11
+    return {"GMT+11 time": format(utc+timedelta(hours=11))}    # make GMT+11
 
 
 @app.get("/html", response_class=HTMLResponse)
