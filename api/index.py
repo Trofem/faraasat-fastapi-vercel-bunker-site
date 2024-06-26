@@ -30,8 +30,8 @@ async def r_add(request: Request):
     params = request.query_params
     pop = None
     if 'add' in params:
-        r.lpush('list_val', str(params['add']))
-        pop = r.lpop('list_val', 1)  # kill one
+        r.lpushx('list_val', str(params['add']))   # insert at list begin
+        pop = r.lpop('list_val', 1)                # kill last
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,100)], "pop_item": pop }    
 
 
