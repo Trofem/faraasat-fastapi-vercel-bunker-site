@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from sys import version as python_formatted_version
 from fastapi.responses import HTMLResponse
 from datetime import datetime, timedelta
+import redis
 
 app = FastAPI()
 
