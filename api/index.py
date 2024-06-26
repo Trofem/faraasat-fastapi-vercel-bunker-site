@@ -27,12 +27,14 @@ async def root():
 
 @app.get("/r")
 async def root():
-    return {"redis_ping": [i.decode("utf-8") for i in r.smembers('mylist')] }    
+    return {"redis_values": [i.decode("utf-8") for i in r.smembers('mylist')] }
 
 @app.get("/r_add")
 async def r_add(request: Request):
     params = request.query_params
-    return {"params": params }    
+    if 'add' in params:
+        r.sadd('mylist', str(params['add']))
+    return {"redis_values": [i.decode("utf-8") for i in r.smembers('mylist')] }    
 
 
 @app.get("/html", response_class=HTMLResponse)
