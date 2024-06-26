@@ -12,6 +12,14 @@ KV_PASS = os.environ.get('KV_PASS')
 KV_HOST = os.environ.get('KV_HOST')
 KV_PORT = os.environ.get('KV_PORT')
 
+r = redis.Redis(
+    host=KV_HOST,
+    port=KV_PORT,
+    username=KV_USERNAME, 
+    password=KV_PASS,
+    ssl=True
+)
+
 @app.get("/")
 async def root():
     utc = datetime.utcnow()
@@ -19,7 +27,7 @@ async def root():
 
 @app.get("/r")
 async def root():
-    return {"redis_host": f'redis://{KV_HOST}:{KV_PORT}'}    
+    return {"redis_ping": str(r.ping())}    
 
 
 @app.get("/html", response_class=HTMLResponse)
