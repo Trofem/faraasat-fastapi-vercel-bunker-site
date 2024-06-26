@@ -25,16 +25,14 @@ async def root():
     utc = datetime.utcnow()
     return {"GMT+11 time": format(utc+timedelta(hours=11))}    # make GMT+11
 
-@app.get("/r")
-async def root():
-    return {"redis_values": [i.decode("utf-8") for i in r.smembers('mylist')] }
-
-@app.get("/r_add")
+@app.get("/r")   # <host>/r?add=value to add
 async def r_add(request: Request):
     params = request.query_params
+    pop = None
     if 'add' in params:
-        r.sadd('mylist', str(params['add']))
-    return {"redis_values": [i.decode("utf-8") for i in r.smembers('mylist')] }    
+        r.lpush('list_val', str(params['add']))
+        pop = r.lpop('list_val', 1)  # kill one
+    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,100)], "pop_item": pop }    
 
 
 @app.get("/html", response_class=HTMLResponse)
