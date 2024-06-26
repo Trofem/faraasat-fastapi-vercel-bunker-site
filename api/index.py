@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from sys import version as python_formatted_version
-from fastapi.responses import HTMLResponse
+#   from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
@@ -8,7 +8,7 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/html", response_class=HTMLResponse)
+@app.get("/html")      # , response_class=HTMLResponse
 async def root():
     return """
     <html>
@@ -18,4 +18,4 @@ async def root():
         <body>
             <h1>Look me! HTMLResponse!</h1>
         </body>
-    </html> """+str(python_formatted_version)
+    </html> """+'@python '+str(python_formatted_version)
