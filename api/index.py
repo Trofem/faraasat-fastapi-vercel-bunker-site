@@ -27,7 +27,7 @@ async def root():
 
 @app.get("/r")
 async def root():
-    return {"redis_ping": str(r.ping())}    
+    return {"redis_ping": [i.decode("utf-8") for i in r.smembers('mylist')] }    
 
 
 @app.get("/html", response_class=HTMLResponse)
