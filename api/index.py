@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 from sys import version as python_formatted_version
 from fastapi.responses import HTMLResponse
+from datetime import datetime, timedelta
 
 app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    utc = datetime.utcnow()
+    return {"time:": format(utc+timedelta(hours=11))}    # make GMT+11
 
 
 @app.get("/html", response_class=HTMLResponse)
