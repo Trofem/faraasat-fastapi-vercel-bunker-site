@@ -34,10 +34,10 @@ async def r_add(request: Request):
         r.ltrim('list_val', 0, 20)                 # save only first 7 elements
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,21)] }    
 
-@app.post("/r")   
+@app.post("/r")   # POST
 async def r_post_add(request: Request):
-    if 'add' in request.query_params:
-        add_value = request.query_params.get('add')
+    if 'add' in request.headers:
+        add_value = request.headers.get('add')
         r.lpush('list_val', str(add_value))         # insert at list begin
         r.ltrim('list_val', 0, 20)                  # save only first 7 elements
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,21)] }    
