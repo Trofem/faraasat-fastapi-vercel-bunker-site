@@ -27,7 +27,7 @@ async def root():
 @app.get("/r")   # GET  <host>/r?add=value to add
 async def r_add(request: Request):
     params = request.query_params
-    time_str = format(datetime.utcnow()+timedelta(hours=11))
+    time_str = format(datetime.utcnow()+timedelta(hours=11))+" GMT+11"
     if 'add' in params:
         r.lpush('list_val', time_str+' (GET) '+str(params['add']))   # insert at list begin
         r.ltrim('list_val', 0, 20)                 # save only first x elements
@@ -36,7 +36,7 @@ async def r_add(request: Request):
 @app.post("/r")   # POST
 async def r_post_add(request: Request):
     if 'add' in request.headers:
-        time_str = format(datetime.utcnow()+timedelta(hours=11))
+        time_str = format(datetime.utcnow()+timedelta(hours=11))+" GMT+11"
         add_value = request.headers.get('add')
         r.lpush('list_val', time_str+' (POST) '+str(add_value))         # insert at list begin
         r.ltrim('list_val', 0, 20)                  # save only first x elements
