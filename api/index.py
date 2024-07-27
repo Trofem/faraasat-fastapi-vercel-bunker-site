@@ -7,6 +7,7 @@ import redis
 
 app = FastAPI()
 
+
 KV_USERNAME = os.environ.get('KV_USERNAME')
 KV_PASS = os.environ.get('KV_PASS')
 KV_HOST = os.environ.get('KV_HOST')
