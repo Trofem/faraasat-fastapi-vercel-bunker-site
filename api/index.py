@@ -13,6 +13,8 @@ KV_PASS = os.environ.get('KV_PASS')
 KV_HOST = os.environ.get('KV_HOST')
 KV_PORT = os.environ.get('KV_PORT')
 
+os.environ['KV_READ_COUNT'] = 0
+
 r = redis.Redis(
     host=KV_HOST,
     port=KV_PORT,
@@ -23,7 +25,12 @@ r = redis.Redis(
 
 @app.get("/")
 async def root():
-    return {"GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))}    # make GMT+11
+    os.environ['KV_READ_COUNT'] += 1
+    print( os.environ['KV_READ_COUNT'] )
+    return {
+        "GMT+11 time": format(datetime.utcnow()+timedelta(hours=11)),
+        "GMT+11 time": os.environ['KV_READ_COUNT']
+        }    # make GMT+11 and get env count variable
 
 @app.get("/r")   # GET  <host>/r?add=value to add
 async def r_add(request: Request):
