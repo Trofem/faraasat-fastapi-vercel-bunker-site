@@ -50,7 +50,7 @@ async def r_post_add(request: Request):
 async def root(): #
     try:
         return {
-            CreateRandomCharacter()
+            CreateRandomCharacter(isJson=True)
             } 
     except:
         return { "creating character is failed...."}

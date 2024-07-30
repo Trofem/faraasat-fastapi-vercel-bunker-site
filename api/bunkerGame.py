@@ -50,7 +50,7 @@ def AgeGenerator(firstAge:int=1, lastAge:int=99, decimalGeneration:bool=False) -
 
     return value
 
-def CreateRandomCharacter(rightSide:bool = True) -> str:
+def CreateRandomCharacter(isJson:bool=False) -> str:
     gender = "Мужчина" if random.random() <= 0.504 else "Женщина"
     age = AgeGenerator(14,99)
 
@@ -58,43 +58,35 @@ def CreateRandomCharacter(rightSide:bool = True) -> str:
 
     hobby_exp = AgeGenerator(1, round(age/3), decimalGeneration=True)
 
-    profession =     str(Bunker("Profession"))
-    fear =           str(Bunker("Fear"))
-    characteristic = str(Bunker("Characteristic"))
-    baggage =        str(Bunker("Baggage"))
-    personInfo =     str(Bunker("PersonInfo"))
-    hobby =          str(Bunker("Hobby"))
-    return f"""""
-Пол: {gender},\nВозраст: {age},\n
-Профессия: {profession.capitalize()},
-Опыт работы: {profession_exp} {letOrGod(profession_exp)},\n
-Хобби: {hobby},\nОпыт хобби: {hobby_exp} {letOrGod(hobby_exp)},\n
-Фобия: {fear.capitalize()},\n
-Черта характера: {characteristic.capitalize()},\n
-Багаж: {baggage.capitalize()},\n
-Доп. инфа: {personInfo.capitalize()}.
-
-""
-""" if not rightSide else f"""
+    profession =     str(Bunker("Profession")).capitalize()
+    fear =           str(Bunker("Fear")).capitalize()
+    characteristic = str(Bunker("Characteristic")).capitalize()
+    baggage =        str(Bunker("Baggage")).capitalize()
+    personInfo =     str(Bunker("PersonInfo")).capitalize()
+    hobby =          str(Bunker("Hobby")).capitalize()
+    return f''' {{"parameters":{
+        dict("profession":profession, "fear":fear,"characteristic":characteristic, "baggage":baggage,"personInfo":personInfo, "hobby": )}
+        
+        }}''' if isJson else f"""
 ""
 Пол:             {gender},
 Возраст:         {age},
 
-Профессия:       {profession.capitalize()},
+Профессия:       {profession},
 Опыт работы:     {profession_exp} {letOrGod(profession_exp)},
 
-Хобби:           {hobby.capitalize()},
+Хобби:           {hobby},
 Опыт хобби:      {hobby_exp} {letOrGod(hobby_exp)},
 
-Фобия:           {fear.capitalize()},
+Фобия:           {fear},
 
-Черта характера: {characteristic.capitalize()},
+Черта характера: {characteristic},
 
-Багаж:           {baggage.capitalize()},
+Багаж:           {baggage},
 
-Доп. инфа:       {personInfo.capitalize()}.
+Доп. инфа:       {personInfo}.
 ""
 """
-
+#str(dict(test=123)).replace(f"""{chr(39)}""",f"""{chr(34)}""")
 
 
