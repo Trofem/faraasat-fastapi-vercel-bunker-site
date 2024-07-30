@@ -48,9 +48,12 @@ async def r_post_add(request: Request):
 
 @app.get("/character/generate") #GET (create) random bunker character 
 async def root(): #
-    return {
-        CreateRandomCharacter()
-        } 
+    try:
+        return {
+            CreateRandomCharacter()
+            } 
+    except:
+        return { "creating character is failed...."}
 
 @app.get("/html", response_class=HTMLResponse)
 async def root():
