@@ -25,7 +25,8 @@ r = redis.Redis(
 async def root():
     print( os.environ['KV_READ_COUNT'] )
     return {
-        "GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
+        "test"
+        #"GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
         }    # make GMT+11
 
 @app.get("/r")   # GET  <host>/r?add=value to add
