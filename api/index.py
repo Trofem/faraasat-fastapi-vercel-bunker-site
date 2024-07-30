@@ -23,10 +23,8 @@ r = redis.Redis(
 
 @app.get("/")
 async def root():
-    print( os.environ['KV_READ_COUNT'] )
     return {
-        "test"
-        #"GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
+        "GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
         }    # make GMT+11
 
 @app.get("/r")   # GET  <host>/r?add=value to add
@@ -47,6 +45,11 @@ async def r_post_add(request: Request):
         r.ltrim('list_val', 0, 20)                  # save only first x elements
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,21)] }    
 
+@app.get("/character/generate") #GET bunker character 
+async def root():
+    return {
+        "file directory": os.path.dirname(os.path.abspath(__file__))
+        }    # make GMT+11
 
 @app.get("/html", response_class=HTMLResponse)
 async def root():
