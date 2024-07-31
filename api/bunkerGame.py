@@ -1,10 +1,10 @@
 import os
 import random
+import json
 
-print("your path: " + os.path.dirname(os.path.abspath(__file__)) )
 
 class Bunker:
-    directory:str = "/mnt/d/SDK/Python/Random Ideas/Bunker/"
+    directory:str = os.path.dirname(os.path.abspath(__file__) + "/cardFiles/")
     parametreList:list[str]
     cardType:str
 
@@ -50,7 +50,10 @@ def AgeGenerator(firstAge:int=1, lastAge:int=99, decimalGeneration:bool=False) -
 
     return value
 
+bunkerCharacterId = 0 #since starting site
+
 def CreateRandomCharacter(isJson:bool=False) -> str:
+    bunkerCharacterId += 1
     gender = "Мужчина" if random.random() <= 0.504 else "Женщина"
     age = AgeGenerator(14,99)
 
@@ -64,10 +67,25 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
     baggage =        str(Bunker("Baggage")).capitalize()
     personInfo =     str(Bunker("PersonInfo")).capitalize()
     hobby =          str(Bunker("Hobby")).capitalize()
-    return f''' {{"parameters":{
-        dict("profession":profession, "fear":fear,"characteristic":characteristic, "baggage":baggage,"personInfo":personInfo, "hobby": )}
-        
-        }}''' if isJson else f"""
+
+    if isJson:
+        ...
+        filename = "content.json"
+        json_file_value = f'''
+        {{
+            "id": "{bunkerCharacterId}",
+            "gender": "{gender}",
+            "age": "{age}",
+            "profession": "{profession}",
+            "fear": "{fear}"
+        }}
+            '''
+        with open(filepath, "w") as file:
+            # Write some text to the file
+            json.dump(json_file_value,file)
+
+    else:
+        return f"""
 ""
 Пол:             {gender},
 Возраст:         {age},
@@ -85,8 +103,17 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
 Багаж:           {baggage},
 
 Доп. инфа:       {personInfo}.
+
+"id персонажа":  {bunkerCharacterId},
+
+Создано Trofem (https://github.com/Trofem)
 ""
 """
-#str(dict(test=123)).replace(f"""{chr(39)}""",f"""{chr(34)}""")
 
-
+def GetJsonValue():
+    # Open the file in read mode
+    with open(filepath, "r") as file:
+        # Read the contents of the file
+        fileValue = json.load(file)
+    return fileValue
+    

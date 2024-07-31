@@ -8,6 +8,8 @@ import redis
 
 app = FastAPI()
 
+directory = os.path.dirname(os.path.abspath(__file__))
+character_output = None
 
 KV_USERNAME = os.environ.get('KV_USERNAME')
 KV_PASS = os.environ.get('KV_PASS')
@@ -46,11 +48,27 @@ async def r_post_add(request: Request):
         r.ltrim('list_val', 0, 20)                  # save only first x elements
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,21)] }    
 
-@app.get("/character/generate") #GET (create) random bunker character 
+
+@app.get("/character") #GET (already created) random bunker character 
 async def root(): #
+    
     try:
+        if character_output == None: #in case if not created (not json)
+            character_output = CreateRandomCharacter(isJson=False)
+
         return {
-            CreateRandomCharacter(isJson=True)
+            character_output
+            } 
+    except:
+        return { "getting character is failed...."}
+
+@app.get("/character/generate") #GET (create) random bunker character #<host>/character/generate?json
+async def root(): #
+    isJsonBool = True if 'json' in request.headers else False 
+    try:
+        character_output = CreateRandomCharacter(isJson=isJsonBool)
+        return {
+            character_output
             } 
     except:
         return { "creating character is failed...."}
@@ -59,6 +77,6 @@ async def root(): #
 async def root():
     return """
     <html>
-        <head><title>Some HTML in here</title> </head>
-        <body><h1>Look me! HTMLResponse!</h1></body>
+        <head><title>Hello, user!</title> </head>
+        <body><h1>faraasat-fastapi-vercel-example!</h1></body>
     </html> """+'@python '+str(python_formatted_version)
