@@ -69,8 +69,6 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
     hobby =          str(Bunker("Hobby")).capitalize()
 
     if isJson:
-        ...
-        filename = "content.json"
         json_file_value = f'''
         {{
             "id": "{bunkerCharacterId}",

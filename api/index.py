@@ -51,15 +51,14 @@ async def r_post_add(request: Request):
 
 @app.get("/character") #GET (already created) random bunker character 
 async def root(request: Request): #<host>/character?json
+    global character_output
     try:
         isJson = True if 'json' in request.headers else False
         
         if character_output == "Null": #in case if not created
             character_output = CreateRandomCharacter(isJson=isJson)
 
-        return {
-            character_output
-            } 
+        return character_output
     except Exception as e:
 
         return {f"getting character is failed.... \n {e}"}
