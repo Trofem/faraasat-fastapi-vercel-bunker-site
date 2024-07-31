@@ -80,9 +80,8 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
             "fear": "{fear}"
         }}
             '''
-        with open(filepath, "w") as file:
-            # Write some text to the file
-            json.dump(json_file_value,file)
+        return json.loads(json_file_value)
+        
 
     else:
         return f"""
@@ -109,11 +108,4 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
 Создано Trofem (https://github.com/Trofem)
 ""
 """
-
-def GetJsonValue():
-    # Open the file in read mode
-    with open(filepath, "r") as file:
-        # Read the contents of the file
-        fileValue = json.load(file)
-    return fileValue
     
