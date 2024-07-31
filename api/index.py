@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from sys import version as python_formatted_version
 from fastapi.responses import HTMLResponse
 from datetime import datetime, timedelta
-from bunkerGame import CreateRandomCharacter
+from .bunkerGame import CreateRandomCharacter
 import redis
 
 app = FastAPI()
