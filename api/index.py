@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from sys import version as python_formatted_version
 from fastapi.responses import HTMLResponse
 from datetime import datetime, timedelta
-from bunkerGame import CreateRandomCharacter
+from .bunkergame import CreateRandomCharacter
 import redis
 
 app = FastAPI()
@@ -55,7 +55,7 @@ async def root(request: Request): #<host>/character?json
         isJson = True if 'json' in request.headers else False
         
         if character_output == "Null": #in case if not created
-            character_output = CreateRandomCharacter(isJson=False)
+            character_output = CreateRandomCharacter(isJson=isJson)
 
         return {
             character_output
