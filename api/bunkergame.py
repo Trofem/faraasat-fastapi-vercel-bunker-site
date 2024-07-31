@@ -53,6 +53,7 @@ def AgeGenerator(firstAge:int=1, lastAge:int=99, decimalGeneration:bool=False) -
 bunkerCharacterId = 0 #since starting site
 
 def CreateRandomCharacter(isJson:bool=False) -> str:
+    global bunkerCharacterId
     bunkerCharacterId += 1
     gender = "Мужчина" if random.random() <= 0.504 else "Женщина"
     age = AgeGenerator(14,99)
