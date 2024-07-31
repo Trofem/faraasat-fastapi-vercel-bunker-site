@@ -50,28 +50,20 @@ async def r_post_add(request: Request):
 
 
 @app.get("/character") #GET (already created) random bunker character 
-async def root(): #
-    
+async def root(): #<host>/character?json
     try:
-        if character_output == None: #in case if not created (not json)
+        isJson = True if 'json' in request.headers else False
+        
+        if character_output == None: #in case if not created
             character_output = CreateRandomCharacter(isJson=False)
 
         return {
             character_output
             } 
-    except:
-        return { "getting character is failed...."}
+    except Exception as e:
 
-@app.get("/character/generate") #GET (create) random bunker character #<host>/character/generate?json
-async def root(): #
-    isJsonBool = True if 'json' in request.headers else False 
-    try:
-        character_output = CreateRandomCharacter(isJson=isJsonBool)
-        return {
-            character_output
-            } 
-    except:
-        return { "creating character is failed...."}
+        return {f"getting character is failed.... \n {e}"}
+
 
 @app.get("/html", response_class=HTMLResponse)
 async def root():
