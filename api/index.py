@@ -50,7 +50,7 @@ async def r_post_add(request: Request):
 
 
 @app.get("/character") #GET (already created) random bunker character 
-async def root(): #<host>/character?json
+async def root(request: Request): #<host>/character?json
     try:
         isJson = True if 'json' in request.headers else False
         
