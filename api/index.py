@@ -9,7 +9,7 @@ import redis
 app = FastAPI()
 
 directory = os.path.dirname(os.path.abspath(__file__))
-character_output = None
+character_output = "Null"
 
 KV_USERNAME = os.environ.get('KV_USERNAME')
 KV_PASS = os.environ.get('KV_PASS')
@@ -54,7 +54,7 @@ async def root(request: Request): #<host>/character?json
     try:
         isJson = True if 'json' in request.headers else False
         
-        if character_output == None: #in case if not created
+        if character_output == "Null": #in case if not created
             character_output = CreateRandomCharacter(isJson=False)
 
         return {
