@@ -50,22 +50,16 @@ async def r_post_add(request: Request):
 
 
 @app.get("/api/character") #GET (already created) random bunker character 
-async def root(request: Request): #<host>/api/character?json
+async def get_character(request: Request): #<host>/api/character?json
     global character_output
     params = request.query_params
-    #try:
-    isJson = True if 'json' in params else False
-    
+    isJson = 'json' in params
     character_output = CreateRandomCharacter(isJson=isJson)
-
-    return character_output
-    #except Exception as e:
-
-        #return {f"getting character is failed.... \n {e}"}
+    return HTMLResponse(character_output) if not isJson else JSONResponse(character_output)
 
 
 @app.get("/", response_class=HTMLResponse)
-async def root():
+async def main():
     with open( HTMLdirectory+"mainSite.html", "r" ) as f:
         return f.read()
     

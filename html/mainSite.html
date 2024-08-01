@@ -1,32 +1,42 @@
-<html>
-    <head>
-        <title>Генератор бункер!</title>
-        <style>
-            body {
-                background-color: rgb(188, 212, 255);
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор бункер!</title>
+    <style>
+        body {
+            background-color: rgb(188, 212, 255);
+        }
+    </style>
+</head>
+<body>
+    <h2>Сайт по созданию персонажей для игры в бункер</h2>
+    <p>На данном сайте, достаточно нажать на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
+    <h2>Кнопка</h2>
+    <button type="button" name="generateCharacterButton" onclick="generateCharacter()">
+        Сгенерировать персонажа
+    </button>
+    
+    <h2>Результат</h2>
+    <div id="characterContainer"></div>
+
+    <h2>Создатель:</h2>
+    <a href="https://github.com/Trofem/">Trofem</a>
+
+    <script>
+        async function generateCharacter() {
+            try {
+                const response = await fetch('/api/character');
+                if (!response.ok) {
+                    throw new Error('Ошибка сети при получении данных.');
+                }
+                const characterHtml = await response.text();
+                document.getElementById("characterContainer").innerHTML = characterHtml;
+            } catch (error) {
+                document.getElementById("characterContainer").innerHTML = `Произошла ошибка: ${error.message}`;
             }
-        </style>
-        <script>
-            function generateCharacter() {
-                // Here you can write the code to generate the character
-                // For example:
-                let character = "Generated character";
-                
-                // Display the generated character
-                document.getElementById("characterContainer").innerHTML = character;
-            }
-        </script>
-    </head>
-    <body>
-        <h2>Сайт по созданию персонажей для игры в бункер</h2>
-        <p>На данном сайте, достаточно нажать на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
-        <h2>Кнопка</h2>
-        <button type="button" name="generateCharacterButton" onclick="generateCharacter()">
-            Сгенерировать персонажа
-        </button>
-        <h2>Результат</h2>
-        <div id="characterContainer"></div>
-        <h2>Создатель:</h2>
-        <a href="https://github.com/Trofem/">Trofem</a>
-    </body>
+        }
+    </script>
+</body>
 </html>
