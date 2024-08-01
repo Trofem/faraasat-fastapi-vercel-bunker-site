@@ -53,15 +53,15 @@ async def r_post_add(request: Request):
 async def root(request: Request): #<host>/api/character?json
     global character_output
     params = request.query_params
-    try:
-        isJson = True if 'json' in params else False
-        
-        character_output = CreateRandomCharacter(isJson=isJson)
+    #try:
+    isJson = True if 'json' in params else False
+    
+    character_output = CreateRandomCharacter(isJson=isJson)
 
-        return character_output
-    except Exception as e:
+    return character_output
+    #except Exception as e:
 
-        return {f"getting character is failed.... \n {e}"}
+        #return {f"getting character is failed.... \n {e}"}
 
 
 @app.get("/", response_class=HTMLResponse)
