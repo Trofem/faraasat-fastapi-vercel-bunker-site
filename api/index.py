@@ -66,9 +66,6 @@ async def root(request: Request): #<host>/api/character?json
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    with open(filepath, "w") as file:
-        # Write some text to the file
-        json.dump( CreateRandomCharacter(isJson=False), file)
     return f"""
     <html>
         <head><title>Генератор бункер!</title> </head>
