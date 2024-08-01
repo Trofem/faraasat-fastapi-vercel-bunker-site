@@ -7,12 +7,19 @@
     <style>
         body {
             background-color: #bcd4ff;
+
         }
         .disabled {
         opacity: 0.5;
         cursor: not-allowed;
         }
-
+        button:active, button:focus {
+        border-color: white;
+        box-shadow: 0 0 5px white; /* Optional: Add a subtle shadow to indicate selection */
+        }
+        button:active {
+        border-color: grey;
+        }
     </style>
 </head>
 <body>
@@ -24,7 +31,7 @@
 
     <!-- Кнопка генерации -->
     <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
-    color: white; border: none; padding: 10px 20px; border-radius: 50px;" onclick="generateCharacter()">
+    color: white;  padding: 10px 20px; border-radius: 50px;" onclick="generateCharacter()">
         
         Создать персонажа (случайного)
     </button>
