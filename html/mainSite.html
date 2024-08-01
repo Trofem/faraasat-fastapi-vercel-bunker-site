@@ -6,12 +6,22 @@
                 background-color: rgb(188, 212, 255);
             }
         </style>
+        <script>
+            function generateCharacter() {
+                // Here you can write the code to generate the character
+                // For example:
+                let character = "Generated character";
+                
+                // Display the generated character
+                document.getElementById("characterContainer").innerHTML = character;
+            }
+        </script>
     </head>
     <body>
         <h2>Сайт по созданию персонажей для игры в бункер</h2>
         <p>На данном сайте, достаточно нажать на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
         <h2>Кнопка</h2>
-        <button type="button" name="generateCharacterButton">
+        <button type="button" name="generateCharacterButton" onclick="generateCharacter()">
             Сгенерировать персонажа
         </button>
         <h2>Результат</h2>
