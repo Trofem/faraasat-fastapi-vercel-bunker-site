@@ -80,7 +80,7 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
             "profession_exp": "{profession_exp}",
             "hobby": "{hobby}",
             "hobby_exp": "{hobby_exp}",
-            "fear": "{fear}"
+            "fear": "{fear}",
             "characteristic": "{characteristic}",
             "baggage": "{baggage}",
             "personInfo": {personInfo},
