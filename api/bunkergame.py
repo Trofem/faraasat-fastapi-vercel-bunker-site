@@ -72,27 +72,25 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
     if isJson:
         json_file_value = f'''
         {{
-            "way": "{Bunker("Profession").directory}",
-            "id": "{bunkerCharacterId}",
+            "id": {bunkerCharacterId},
             "gender": "{gender}",
-            "age": "{age}",
+            "age": {age},
             "profession": "{profession}",
-            "profession_exp": "{profession_exp}",
+            "profession_exp": {profession_exp},
             "hobby": "{hobby}",
-            "hobby_exp": "{hobby_exp}",
+            "hobby_exp": {hobby_exp},
             "fear": "{fear}",
             "characteristic": "{characteristic}",
             "baggage": "{baggage}",
-            "personInfo": {personInfo},
-
+            "personInfo": "{personInfo}"
         }}
-            '''
+        '''
         return json.loads(json_file_value)
         
 
     else:
         return f"""
-<html>
+    <html>
     <body>
     <ul>
         <li><p>Пол:             {gender},</p></li>
@@ -117,7 +115,7 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
     <body>
         <body><h3>Создатель:</h3></body>
                 <h4><a href="https://github.com/Trofem/">Trofem</a></h4> 
-<html>
+    <html>
 
-"""
+        """
     
