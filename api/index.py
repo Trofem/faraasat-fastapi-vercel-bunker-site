@@ -24,7 +24,7 @@ r = redis.Redis(
     ssl=True
 )
 
-@app.get("/")
+@app.get("/d")
 async def root():
     return {
         "GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
@@ -49,15 +49,14 @@ async def r_post_add(request: Request):
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,21)] }    
 
 
-@app.get("/character") #GET (already created) random bunker character 
-async def root(request: Request): #<host>/character?json
+@app.get("/api/character") #GET (already created) random bunker character 
+async def root(request: Request): #<host>/api/character?json
     global character_output
     params = request.query_params
     try:
         isJson = True if 'json' in params else False
         
-        if character_output == "Null": #in case if not created
-            character_output = CreateRandomCharacter(isJson=isJson)
+        character_output = CreateRandomCharacter(isJson=isJson)
 
         return character_output
     except Exception as e:
@@ -65,10 +64,25 @@ async def root(request: Request): #<host>/character?json
         return {f"getting character is failed.... \n {e}"}
 
 
-@app.get("/html", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def root():
-    return """
+    with open(filepath, "w") as file:
+        # Write some text to the file
+        json.dump( CreateRandomCharacter(isJson=False), file)
+    return f"""
     <html>
-        <head><title>Hello, user!</title> </head>
-        <body><h1>faraasat-fastapi-vercel-example!</h1></body>
-    </html> """+'@python '+str(python_formatted_version)
+        <head><title>Генератор бункер!</title> </head>
+        <body><h2>Сайт по созданию персонажей для игры в бункер</h2></body>
+            <p>На данном сайте, достаточно нажать на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
+        <body><h2>Кнопка</h2></body>
+        <button type="button" name="generateCharacterButton">
+	        Сгенерировать персонажа
+        </button>
+        <body><h2>Результат</h2></body>
+        <div id="characterContainer"></div>
+        <body><h2>Создатель:</h2></body>
+         <a href="https://github.com/Trofem/">Trofem</a> 
+    </html> """
+    
+
+#@python {str(python_formatted_version)}
