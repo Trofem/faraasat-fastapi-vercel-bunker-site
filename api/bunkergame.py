@@ -4,7 +4,7 @@ import json
 
 
 class Bunker:
-    directory:str = os.path.dirname(os.path.abspath(__file__) + "/cardFiles/")
+    directory:str = os.path.abspath(os.getcwd()) + "/api/cardFiles/"
     parametreList:list[str]
     cardType:str
 
