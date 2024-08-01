@@ -112,9 +112,6 @@ def CreateRandomCharacter(isJson:bool=False) -> str:
 
         <li><p>"id персонажа":  {bunkerCharacterId},</p></li>
 	</ul>  
-    <body>
-        <body><h3>Создатель:</h3></body>
-                <h4><a href="https://github.com/Trofem/">Trofem</a></h4> 
     <html>
 
         """

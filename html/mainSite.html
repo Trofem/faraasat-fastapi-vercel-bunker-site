@@ -6,35 +6,78 @@
     <title>Генератор бункер!</title>
     <style>
         body {
-            background-color: rgb(188, 212, 255);
+            background-color: #bcd4ff;
         }
+        .disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        }
+
     </style>
 </head>
 <body>
+    <!-- Начальный текст -->
     <h2>Сайт по созданию персонажей для игры в бункер</h2>
-    <p>На данном сайте, достаточно нажать на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
+
+    <p>На данном сайте, достаточно <b>нажать</b> на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
     <h2>Кнопка</h2>
-    <button type="button" name="generateCharacterButton" onclick="generateCharacter()">
-        Сгенерировать персонажа
+
+    <!-- Кнопка генерации -->
+    <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
+    color: white; border: none; padding: 10px 20px; border-radius: 50px;" onclick="generateCharacter()">
+        
+        Создать персонажа (случайного)
     </button>
-    
+    <!-- Результат -->
     <h2>Результат</h2>
     <div id="characterContainer"></div>
 
-    <h2>Создатель:</h2>
-    <a href="https://github.com/Trofem/">Trofem</a>
 
+
+
+    <!-- Кнопка очистка текста -->
+    <button type="button" name="clearCharacterButton" onclick="clearCharacter()" disabled>
+        Очистить текст
+    </button>
+    <!-- Авторы -->
+    <h2 style="color:blue;">Создатель:</h2>
+    <a style="color:blue;" href="https://github.com/Trofem/">Trofem</a>
+
+    <!-- пост-скриптум (: -->
     <script>
+        var response_directory = '/api/character';
+        var text_container_name = "characterContainer";
         async function generateCharacter() {
             try {
-                const response = await fetch('/api/character');
+                const response = await fetch(response_directory);
                 if (!response.ok) {
-                    throw new Error('Ошибка сети при получении данных.');
+                    throw new Error(`
+                    <body>
+                    <p><ins>Ошибка сети при получении данных.</ins></p>
+                    <p><ins>Сообщите создателю (response ${response_directory} is not ok).</ins></p>
+                    </body>
+                    `);
                 }
                 const characterHtml = await response.text();
-                document.getElementById("characterContainer").innerHTML = characterHtml;
+                document.getElementById(text_container_name).innerHTML = characterHtml;
             } catch (error) {
-                document.getElementById("characterContainer").innerHTML = `Произошла ошибка: ${error.message}`;
+                document.getElementById(text_container_name).innerHTML = `Произошла ошибка: ${error.message}`;
+            }
+            DisableButtonState(false);
+        }
+        async function clearCharacter(){
+            document.getElementById(text_container_name).innerHTML = "";
+            DisableButtonState(true);
+        }
+        function DisableButtonState(state){ //state - bool of state
+            var clearButton = document.querySelector('button[name="clearCharacterButton"]');
+                
+            if (state == true) {
+                clearButton.disabled = true;
+                clearButton.classList.add('disabled');
+            } else {
+                clearButton.disabled = false;
+                clearButton.classList.remove('disabled');
             }
         }
     </script>
