@@ -8,7 +8,7 @@ import redis
 
 app = FastAPI()
 
-directory = os.path.dirname(os.path.abspath(__file__))
+HTMLdirectory:str = os.path.abspath(os.getcwd()) + "/html/"
 character_output = "Null"
 
 KV_USERNAME = os.environ.get('KV_USERNAME')
@@ -66,20 +66,8 @@ async def root(request: Request): #<host>/api/character?json
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    return f"""
-    <html>
-        <head><title>Генератор бункер!</title> </head>
-        <body><h2>Сайт по созданию персонажей для игры в бункер</h2></body>
-            <p>На данном сайте, достаточно нажать на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
-        <body><h2>Кнопка</h2></body>
-        <button type="button" name="generateCharacterButton">
-	        Сгенерировать персонажа
-        </button>
-        <body><h2>Результат</h2></body>
-        <div id="characterContainer"></div>
-        <body><h2>Создатель:</h2></body>
-         <a href="https://github.com/Trofem/">Trofem</a> 
-    </html> """
+    with open( HTMLdirectory+"mainSite.html", "r" ) as f:
+        return f.read()
     
 
 #@python {str(python_formatted_version)}
