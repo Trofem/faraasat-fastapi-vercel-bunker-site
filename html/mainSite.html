@@ -31,7 +31,7 @@
 
     <!-- Кнопка генерации -->
     <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
-    color: white;  padding: 10px 20px; border-radius: 50px;" onclick="generateCharacter()">
+    color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generateCharacter()">
         
         Создать персонажа (случайного)
     </button>
@@ -43,17 +43,22 @@
 
 
     <!-- Кнопка очистка текста -->
-    <button type="button" name="clearCharacterButton" onclick="clearCharacter()" disabled>
-        Очистить текст
-    </button>
+    <button type="button" name="clearCharacterButton" style="background: linear-gradient(to right, #ff1c1c, #ffa5a5); 
+        color: white;  padding: 5px 15px; border-radius: 25px;" onclick="clearCharacter()" disabled>
+    Очистить текст
+	</button>
     <!-- Авторы -->
-    <h2 style="color:blue;">Создатель:</h2>
-    <a style="color:blue;" href="https://github.com/Trofem/">Trofem</a>
+    <h2 style="color:rgb(40, 40, 250);">Создатель:</h2>
+    <a style="color:rgb(57, 57, 238);" href="https://github.com/Trofem/">Trofem</a>
 
     <!-- пост-скриптум (: -->
     <script>
         var response_directory = '/api/character';
         var text_container_name = "characterContainer";
+        function start(){
+		
+			DisableButtonState(true);
+		}
         async function generateCharacter() {
             try {
                 const response = await fetch(response_directory);
@@ -66,15 +71,23 @@
                     `);
                 }
                 const characterHtml = await response.text();
-                document.getElementById(text_container_name).innerHTML = characterHtml;
+                characterText(characterHtml);
             } catch (error) {
-                document.getElementById(text_container_name).innerHTML = `Произошла ошибка: ${error.message}`;
+                characterText(`Произошла ошибка: ${error.message}`);
             }
-            DisableButtonState(false);
         }
+        
         async function clearCharacter(){
-            document.getElementById(text_container_name).innerHTML = "";
-            DisableButtonState(true);
+            characterText("");
+        }
+        async function characterText(value) {
+            document.getElementById(text_container_name).innerHTML = value;
+            if (value == ""){
+                DisableButtonState(true);
+            }
+            else{
+                DisableButtonState(false)
+            }
         }
         function DisableButtonState(state){ //state - bool of state
             var clearButton = document.querySelector('button[name="clearCharacterButton"]');
@@ -87,6 +100,8 @@
                 clearButton.classList.remove('disabled');
             }
         }
+        
+        window.onload = start;
     </script>
 </body>
 </html>
