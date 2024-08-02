@@ -27,13 +27,19 @@
     <h2>Сайт по созданию персонажей для игры в бункер</h2>
 
     <p>На данном сайте, достаточно <b>нажать</b> на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
-    <h2>Кнопки</h2>
+    <h2>Кнопка</h2>
 
     <!-- Кнопка генерации -->
     <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
     color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generate('/api/character')">
         
         Создать персонажа (случайного)
+    </button>
+    <!-- Кнопка генерации -->
+    <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
+    color: white;  padding: 10px 30px; border-radius: 50px;" onclick="generate('/api/bunker')">
+        
+        Создать характеристики бункера (случайного)
     </button>
     <!-- Результат -->
     <h2>Результат</h2>
@@ -53,36 +59,34 @@
 
     <!-- пост-скриптум (: -->
     <script>
+        //var response_directory = '/api/character';
         var text_container_name = "characterContainer";
         function start(){
 		
 			DisableButtonState(true);
 		}
-        async function generate(getDirectory) {
+        async function generate(response_directory) {
             try {
-                const response = await fetch(getDirectory);
+                const response = await fetch(response_directory);
                 if (!response.ok) {
                     throw new Error(`
                     <body>
                     <p><ins>Ошибка сети при получении данных.</ins></p>
-                    <p><ins>Сообщите создателю (response ${getDirectory} is not ok).</ins></p>
+                    <p><ins>Сообщите создателю (response ${response_directory} is not ok).</ins></p>
                     </body>
                     `);
                 }
                 const characterHtml = await response.text();
                 characterText(characterHtml);
             } catch (error) {
-                characterText(`
-                <body>
-                    <p><ins>Произошла ошибка: ${error.message}</ins></p>
-                    <p><ins>Сообщите создателю.</ins></p>
-                </body>
-                    `);
+                characterText(`Произошла ошибка: ${error.message}`);
             }
+            DisableButtonState(false);
         }
         
         async function clearCharacter(){
             characterText("");
+            DisableButtonState(true);
         }
         async function characterText(value) {
             document.getElementById(text_container_name).innerHTML = value;
@@ -90,7 +94,7 @@
                 DisableButtonState(true);
             }
             else{
-                DisableButtonState(false)
+                DisableButtonState(false);
             }
         }
         function DisableButtonState(state){ //state - bool of state
