@@ -27,11 +27,11 @@
     <h2>Сайт по созданию персонажей для игры в бункер</h2>
 
     <p>На данном сайте, достаточно <b>нажать</b> на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
-    <h2>Кнопка</h2>
+    <h2>Кнопки</h2>
 
     <!-- Кнопка генерации -->
     <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
-    color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generateCharacter()">
+    color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generate('/api/character')">
         
         Создать персонажа (случайного)
     </button>
@@ -53,27 +53,31 @@
 
     <!-- пост-скриптум (: -->
     <script>
-        var response_directory = '/api/character';
         var text_container_name = "characterContainer";
         function start(){
 		
 			DisableButtonState(true);
 		}
-        async function generateCharacter() {
+        async function generate(getDirectory) {
             try {
-                const response = await fetch(response_directory);
+                const response = await fetch(getDirectory);
                 if (!response.ok) {
                     throw new Error(`
                     <body>
                     <p><ins>Ошибка сети при получении данных.</ins></p>
-                    <p><ins>Сообщите создателю (response ${response_directory} is not ok).</ins></p>
+                    <p><ins>Сообщите создателю (response ${getDirectory} is not ok).</ins></p>
                     </body>
                     `);
                 }
                 const characterHtml = await response.text();
                 characterText(characterHtml);
             } catch (error) {
-                characterText(`Произошла ошибка: ${error.message}`);
+                characterText(`
+                <body>
+                    <p><ins>Произошла ошибка: ${error.message}</ins></p>
+                    <p><ins>Сообщите создателю.</ins></p>
+                </body>
+                    `);
             }
         }
         

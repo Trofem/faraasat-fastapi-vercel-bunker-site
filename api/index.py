@@ -30,16 +30,20 @@ async def root():
         "GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
         }    # make GMT+11
 
-@app.get("/r")   # GET  <host>/r?add=value to add
+@app.get("/messages")   # GET  <host>/messages?add=value to add
 async def r_add(request: Request):
     params = request.query_params
     time_str = format(datetime.utcnow()+timedelta(hours=11))+" GMT+11"
     if 'add' in params:
-        r.lpush('list_val', time_str+' (GET) '+str(params['add']))   # insert at list begin
-        r.ltrim('list_val', 0, 20)                 # save only first x elements
-    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_val',0,21)] }    
+        value = str(params['add']).replace("\n"," ")
+        if len(value) > 200:
+            value = value[:200]
+        r.lpush('list_messages', value)   # insert at list begin
+        r.ltrim('list_messages', 0, 50)                 # save only first x elements
+        print(f"added {value}")
+    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,21)] }    
 
-@app.post("/r")   # POST
+@app.post("/messages")   # POST
 async def r_post_add(request: Request):
     if 'add' in request.headers:
         time_str = format(datetime.utcnow()+timedelta(hours=11))+" GMT+11"
