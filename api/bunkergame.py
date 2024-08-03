@@ -4,7 +4,7 @@ import random
 import json
 
 
-HTMLdirectory = os.path.abspath(os.getcwd()) + "/RandomIdeas/Bunker/html/"
+HTMLdirectory = os.path.abspath(os.getcwd()) + "/html/"
 
 jinja_env = Environment(loader=FileSystemLoader(HTMLdirectory))
 
