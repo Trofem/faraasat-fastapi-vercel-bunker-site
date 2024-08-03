@@ -134,8 +134,7 @@ def CreateRandomBunker(isJson:bool=False) -> str:
         return json.loads(json_file_value)
     else:
         return bunker_building_template.render(
-            size=size, stocks=stocks, room_count=room_count, rooms=rooms
-            )
+            size=size, stocks=stocks, room_count=room_count, rooms=rooms)
 
 
 #print( CreateRandomCharacter(isJson=False) )
