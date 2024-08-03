@@ -45,7 +45,7 @@ class Bunker:
         else:
             print(f"{self.cardType} is not exist.")
             self.parametreList = ["Error"]
-    
+
 
 def letOrGod(year: int) -> str:
     if year == 1:
