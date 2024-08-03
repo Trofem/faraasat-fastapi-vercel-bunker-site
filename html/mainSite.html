@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор бункер!</title>
+    <title>Генератор бункер (разработка)!</title>
     <style>
         body {
-            background-color: #bcd4ff;
+            background-color: #7c94c2;
 
         }
         .disabled {
@@ -26,21 +26,22 @@
     <!-- Начальный текст -->
     <h2>Сайт по созданию персонажей для игры в бункер</h2>
 
-    <p>На данном сайте, достаточно <b>нажать</b> на кнопку ниже и вы сможете получить сгенерированного персонажа.</p>
+    <p>На данном сайте, достаточно <b>нажать</b> на кнопку ниже и вы сможете получить сгенерированного персонажа. (В разработке)</p>
     <h2>Кнопка</h2>
 
-    <!-- Кнопка генерации -->
+    <!-- Кнопки генерации -->
     <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
     color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generate('/api/character')">
         
         Создать персонажа (случайного)
     </button>
-    <!-- Кнопка генерации -->
+<p>
     <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
-    color: white;  padding: 10px 30px; border-radius: 50px;" onclick="generate('/api/bunker')">
+    color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generate('/api/bunker')">
         
         Создать характеристики бункера (случайного)
     </button>
+    </p>
     <!-- Результат -->
     <h2>Результат</h2>
     <div id="characterContainer"></div>

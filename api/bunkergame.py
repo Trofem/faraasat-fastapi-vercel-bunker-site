@@ -15,7 +15,7 @@ bunker_building_template = jinja_env.get_template('bunkerBuilding.html')
 bunker_character_template = jinja_env.get_template('bunkerCharacter.html')
 
 class Bunker:
-    directory:str = os.path.abspath(os.getcwd()) + "/RandomIdeas/Bunker/cardFiles/"
+    directory:str = os.path.abspath(os.getcwd()) + "/api/cardFiles/" #way to text files
     parametreList:list[str]
     cardType:str #temporary value of created card type
     
@@ -44,7 +44,7 @@ class Bunker:
                 self.parametreList = file.read().split("\n")
         else:
             print(f"{self.cardType} is not exist.")
-            self.parametreList = ["Error"]
+            self.parametreList = ["Error (не смогли выдать карту (сообщите разработчику))"]
 
 
 def letOrGod(year: int) -> str:
@@ -136,6 +136,7 @@ def CreateRandomBunker(isJson:bool=False) -> str:
         return bunker_building_template.render(
             size=size, stocks=stocks, room_count=room_count, rooms=rooms
             )
+
 
 #print( CreateRandomCharacter(isJson=False) )
 #print( CreateRandomBunker(isJson=False) )
