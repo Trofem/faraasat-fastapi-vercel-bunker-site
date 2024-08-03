@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI, Request
 from sys import version as python_formatted_version
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponce
 from datetime import datetime, timedelta
 from .bunkergame import *
 import redis
