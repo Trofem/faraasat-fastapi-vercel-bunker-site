@@ -29,6 +29,11 @@ async def root():
         "GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
         }    # make GMT+11
 
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse("favicon.ico")
+
+
 @app.get("/messages")   # GET  <host>/messages?add=value to add message
 async def r_add(request: Request):
     params = request.query_params
