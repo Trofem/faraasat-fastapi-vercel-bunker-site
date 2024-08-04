@@ -22,7 +22,7 @@ class Bunker:
     def __init__(self,card:str,count:int=1):
         cards_count:int = count #count of cards needed to generate
         cardType = card
-        self.CreateBunkerCards(cardType, cards_count)
+        self.CreateBunkerCard(cardType, cards_count)
 
     def __str__(self) -> str:
         global cardType
@@ -31,7 +31,7 @@ class Bunker:
         self.value:list[str] = random.sample(self.parametreList, self.cards_count)
         return ", ".join(self.value) if self.value != '[]' else "emptyString while random choice. Сообщите разработчику об ошибке"
     
-    def CreateBunkerCards(self, Type:str,count=1) -> None:
+    def CreateBunkerCard(self, Type:str,count=1) -> None:
         self.cards_count = count
         self.cardType = Type
         filepath:str = os.path.join(self.directory, f"Cards_{self.cardType}.txt")

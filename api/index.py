@@ -58,7 +58,7 @@ async def r_post_add(request: Request):
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
 
 
-@app.get("/api/character") #GET (already created) random bunker character 
+@app.get("/api/character") #GET random bunker character 
 async def get_character(request: Request): #<host>/api/character?json
     global site_output
     params = request.query_params
@@ -67,7 +67,7 @@ async def get_character(request: Request): #<host>/api/character?json
     return HTMLResponse(site_output) if not isJson else JSONResponse(site_output)
 
 
-@app.get("/api/bunker") #GET (already created) random bunker building
+@app.get("/api/bunker") #GET random bunker building
 async def get_bunker(request: Request): #<host>/api/bunker?json
     global site_output
     params = request.query_params
