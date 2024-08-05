@@ -43,7 +43,7 @@ async def r_add(request: Request):
         print(f"api messages get ={message}")
         if len(message) > 300:
             message = message[:300]
-        r.lpush(str(message))  # insert at list begin
+        r.lpush('list_messages', str(message))  # insert at list begin
         r.ltrim('list_messages', 0, 50) # save only first x elements
 
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
@@ -56,7 +56,7 @@ async def r_post_add(request: Request):
         print(f"api messages post ={message}")
         if len(message) > 300:
             message = message[:300]
-        r.lpush(str(message))  # insert at list begin
+        r.lpush('list_messages', str(message))  # insert at list begin
         r.ltrim('list_messages', 0, 50) # save only first x elements
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
 
