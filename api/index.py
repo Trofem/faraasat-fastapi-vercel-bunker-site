@@ -34,7 +34,7 @@ async def favicon():
     return FileResponse("favicon.ico")
 
 
-@app.get("/messages")   # GET  <host>/messages?add=value to add message
+@app.get("/api/messages")   # GET  <host>/messages?add=value to add message
 async def r_add(request: Request):
     params = request.query_params
 
@@ -48,7 +48,7 @@ async def r_add(request: Request):
 
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
 
-@app.post("/messages")   # POST
+@app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
 
     if 'add' in request.headers:
