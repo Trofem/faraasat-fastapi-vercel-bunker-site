@@ -83,7 +83,7 @@
     
     <!-- Отправить отзыв -->
 
-    <button class="button-green" name="SendMessageButton" onclick="sendFeedback(''/api/messages'')" disabled>
+    <button class="button-green" name="SendMessageButton" onclick="sendFeedback('/api/messages')" disabled>
         Отправить
     </button>
 
@@ -125,7 +125,7 @@
                 alert("Слишком короткое сообщение");
                 return;
             }
-            elif (feedback.lenght > 300){
+            else if (feedback.lenght > 300){
                 alert("Слишком длинное сообщение");
                 return;
             }
@@ -135,7 +135,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'add': feedback
+                        'body': feedback
                     }
                 });
                 if (!response.ok) {
