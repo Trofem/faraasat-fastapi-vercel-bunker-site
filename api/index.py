@@ -40,7 +40,7 @@ async def r_add(request: Request):
 
     if 'add' in params:
         message = str(params['add'])
-
+        print(f"api messages get ={message}")
         if len(message) > 300:
             message = message[:300]
         r.lpush(str(message))  # insert at list begin
@@ -50,10 +50,10 @@ async def r_add(request: Request):
 
 @app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
-
     if 'add' in request.headers:
         form_data = await request.form()
         message = form_data.get('add').replace("\n","  ")
+        print(f"api messages post ={message}")
         if len(message) > 300:
             message = message[:300]
         r.lpush(str(message))  # insert at list begin
