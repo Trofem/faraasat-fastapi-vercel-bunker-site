@@ -64,6 +64,7 @@ async def r_post_add(request: Request):
 @app.get("/api/character") #GET random bunker character 
 async def get_character(request: Request): #<host>/api/character?json
     global site_output
+    print(f"api character get")
     params = request.query_params
     isJson = 'json' in params
     site_output = CreateRandomCharacter(isJson=isJson)
@@ -73,6 +74,7 @@ async def get_character(request: Request): #<host>/api/character?json
 @app.get("/api/bunker") #GET random bunker building
 async def get_bunker(request: Request): #<host>/api/bunker?json
     global site_output
+    print(f"api bunker get")
     params = request.query_params
     isJson = 'json' in params
     site_output = CreateRandomBunker(isJson=isJson)
@@ -81,6 +83,7 @@ async def get_bunker(request: Request): #<host>/api/bunker?json
 
 @app.get("/", response_class=HTMLResponse)
 async def main():
+    print(f"api website get")
     with open( HTMLdirectory+"mainSite.html", "r" ) as f:
         return f.read()
     
