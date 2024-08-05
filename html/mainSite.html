@@ -14,12 +14,35 @@
         cursor: not-allowed;
         }
         button:active, button:focus {
-        border-color: white;
-        box-shadow: 0 0 5px white; /* Optional: Add a subtle shadow to indicate selection */
+        border-color: gray;
+        box-shadow: 0 0 5px white;
         }
         button:active {
-        border-color: grey;
+        border-color: black;
         }
+        textarea {
+            border: 5px solid;
+            border-image: linear-gradient(to right, #1c59ff, gray) 1;
+            padding: 5px;
+            color: black;
+            background-image: #5071af;
+            background-color: transparent;
+            width: 300px;
+            height: 100px;
+            resize: none;
+            overflow: auto;
+        }
+        .button-blue {
+            background: linear-gradient(to right, #1c59ff, #a5c4ff); 
+            color: white;
+            padding: 5px 15px; 
+            border-radius: 50px;
+        }
+        .button-red {
+			background: linear-gradient(to right, #ff1c1c, #ffa5a5); 
+        color: white;  padding: 5px 15px; border-radius: 25px;
+        }
+
     </style>
 </head>
 <body>
@@ -30,14 +53,12 @@
     <h2>Кнопка</h2>
 
     <!-- Кнопки генерации -->
-    <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
-    color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generate('/api/character')">
+    <button class="button-blue" name="createCharacterButton" onclick="generate('/api/character')">
         
         Создать персонажа (случайного)
     </button>
 <p>
-    <button type="button" name="createCharacterButton" style="background: linear-gradient(to right, #1c59ff, #a5c4ff); 
-    color: white;  padding: 5px 15px; border-radius: 50px;" onclick="generate('/api/bunker')">
+    <button class="button-blue" name="createCharacterButton" onclick="generate('/api/bunker')">
         
         Создать характеристики бункера (случайного)
     </button>
@@ -46,14 +67,15 @@
     <h2>Результат</h2>
     <div id="characterContainer"></div>
 
-
-
-
     <!-- Кнопка очистка текста -->
-    <button type="button" name="clearCharacterButton" style="background: linear-gradient(to right, #ff1c1c, #ffa5a5); 
-        color: white;  padding: 5px 15px; border-radius: 25px;" onclick="clearCharacter()" disabled>
+    <button class="button-red" name="clearCharacterButton" onclick="clearCharacter()" disabled>
     Очистить текст
 	</button>
+    
+    <!-- Отправить отзыв -->
+    <h2>Отзыв о работе сайта</h2>
+    <p> <textarea placeholder="Напишите отзыв"></textarea> </p>
+    
     <!-- Авторы -->
     <h2 style="color:rgb(40, 40, 250);">Создатель:</h2>
     <a style="color:rgb(57, 57, 238);" href="https://github.com/Trofem/">Trofem</a>

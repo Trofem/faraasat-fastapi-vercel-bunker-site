@@ -26,7 +26,6 @@ class Bunker:
 
     def __str__(self) -> str:
         global cardType
-        print(f"мы возращаем {self.cards_count}")
         print("empty string in file! " + self.cardType) if "" in self.parametreList else ...
         self.value:list[str] = random.sample(self.parametreList, self.cards_count)
         return ", ".join(self.value) if self.value != '[]' else "emptyString while random choice. Сообщите разработчику об ошибке"
@@ -43,7 +42,7 @@ class Bunker:
             with open(filepath, "r") as file:
                 self.parametreList = file.read().split("\n")
         else:
-            print(f"{self.cardType} is not exist.")
+            print(f"{self.cardType} is not exist. ({filepath})")
             self.parametreList = ["Error (не смогли выдать карту (сообщите разработчику))"]
 
 
