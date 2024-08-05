@@ -22,7 +22,7 @@
         }
         textarea {
             border: 5px solid;
-            border-image: linear-gradient(to right, #1c59ff, gray) 1;
+            border-image: linear-gradient(to right, #1c59ff, #6df85b) 1;
             padding: 5px;
             color: black;
             background-image: #5071af;
@@ -42,6 +42,10 @@
 			background: linear-gradient(to right, #ff1c1c, #ffa5a5); 
         color: white;  padding: 5px 15px; border-radius: 25px;
         }
+        .button-green {
+			background: linear-gradient(to right, #239c13, #6df85b); 
+        color: white;  padding: 5px 15px; border-radius: 25px;
+        }
 
     </style>
 </head>
@@ -53,12 +57,12 @@
     <h2>Кнопка</h2>
 
     <!-- Кнопки генерации -->
-    <button class="button-blue" name="createCharacterButton" onclick="generate('/api/character')">
+    <button class="button-blue" name="createCharacterButton" onclick="getResponce('/api/character')">
         
         Создать персонажа (случайного)
     </button>
 <p>
-    <button class="button-blue" name="createCharacterButton" onclick="generate('/api/bunker')">
+    <button class="button-blue" name="createCharacterButton" onclick="getResponce('/api/bunker')">
         
         Создать характеристики бункера (случайного)
     </button>
@@ -72,30 +76,39 @@
     Очистить текст
 	</button>
     
-    <!-- Отправить отзыв -->
+    <!-- Текстовое поле отзыва о работе -->
+
     <h2>Отзыв о работе сайта</h2>
-    <p> <textarea placeholder="Напишите отзыв"></textarea> </p>
+    <p> <textarea name="feedbackForm" placeholder="Напишите отзыв (5 - 300 символов)"></textarea> </p>
     
+    <!-- Отправить отзыв -->
+
+    <button class="button-green" name="SendMessageButton" onclick="sendFeedback(''/api/messages'')" disabled>
+        Отправить
+    </button>
+
     <!-- Авторы -->
+
     <h2 style="color:rgb(40, 40, 250);">Создатель:</h2>
     <a style="color:rgb(57, 57, 238);" href="https://github.com/Trofem/">Trofem</a>
 
     <!-- пост-скриптум (: -->
     <script>
-        //var response_directory = '/api/character';
         var text_container_name = "characterContainer";
+        var textarea_name = 'feedbackForm';
         function start(){
-		
+            var feedback_is_sent = false;
+            var text_area = document.getElementById(textarea_name)
 			DisableButtonState(true);
 		}
-        async function generate(response_directory) {
+        async function getResponce(response_url) {
             try {
-                const response = await fetch(response_directory);
+                const response = await fetch(response_url);
                 if (!response.ok) {
                     throw new Error(`
                     <body>
                     <p><ins>Ошибка сети при получении данных.</ins></p>
-                    <p><ins>Сообщите создателю (response ${response_directory} is not ok).</ins></p>
+                    <p><ins>Сообщите создателю (response ${response_url} is not ok).</ins></p>
                     </body>
                     `);
                 }
@@ -106,7 +119,37 @@
             }
             DisableButtonState(false);
         }
-        
+        async function sendFeedback(response_url) {
+            const feedback = text_area.feedback.value;
+            if (feedback.lenght < 5){
+                alert("Слишком короткое сообщение");
+                return;
+            }
+            elif (feedback.lenght > 300){
+                alert("Слишком длинное сообщение");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'add': feedback
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to send feedback');
+                }
+                alert('Отзыв отправлен');
+                text_area.feedback.value = '';
+                feedback_is_sent = true;
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Произошла ошибка при отправке отзыва: ' + error);
+            }
+        }
+
         async function clearCharacter(){
             characterText("");
             DisableButtonState(true);

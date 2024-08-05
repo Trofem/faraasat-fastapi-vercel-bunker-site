@@ -46,21 +46,18 @@ async def r_add(request: Request):
         r.lpush(str(message))  # insert at list begin
         r.ltrim('list_messages', 0, 50) # save only first x elements
 
-    return {"": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
+    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
 
 @app.post("/messages")   # POST
 async def r_post_add(request: Request):
 
     if 'add' in request.headers:
-
-        message = request.headers.get('add').replace("\n","")
-        if len(message ) < 10:
-            print(f"сообщение слишком короткое!: " + repr(message))
-        elif len(message) > 300:
+        form_data = await request.form()
+        message = form_data.get('add').replace("\n","  ")
+        if len(message) > 300:
             message = message[:300]
         r.lpush(str(message))  # insert at list begin
         r.ltrim('list_messages', 0, 50) # save only first x elements
-        print()
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
 
 
