@@ -98,12 +98,12 @@
         var text_container_name = "characterContainer";
         var textarea_name = 'feedbackForm';
         var feedback_text_name = 'feedbackStatus';
+        var feedback_is_sent = false;
+        var text_area = document.getElementById(textarea_name);
         //начало работы
         function start(){
-            var feedback_is_sent = false;
-            var text_area = document.getElementById(textarea_name)
 			ClearButtonStateChangeTo(false);
-            feedbackText(`Работает`);
+            feedbackText(`не отправленно`);
 		}
         //функция для дебаггинга
         async function say(text_value){
