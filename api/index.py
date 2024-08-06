@@ -34,30 +34,7 @@ async def favicon():
     return FileResponse("favicon.ico")
 
 
-@app.get("/api/messages")   # GET  <host>/messages?add=value to add message
-async def r_add(request: Request):
-    params = request.query_params
-    print("try access to messages throught get")
-    if 'add' in params:
-        message = str(params['add'])
-        print(f"api messages get ={message}")
-        if len(message) > 300:
-            message = message[:300]
-        r.lpush('list_messages', str(message))  # insert at list begin
-        r.ltrim('list_messages', 0, 50) # save only first x elements
-
-    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
-
-@app.post("/api/messages")   # POST
-async def r_post_add(request: Request):
-    print("try access to messages throught post")
-    if 'add' in request.headers:
-        form_data = await request.form()
-        message = form_data.get('add').replace("\n","  ")
-        print(f"api messages post ={message}")
-        if len(message) > 300:
-            message = message[:300]
-        r.lpush('list_messages', str(message))  # insert at list begin
+ц
         r.ltrim('list_messages', 0, 50) # save only first x elements
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
 

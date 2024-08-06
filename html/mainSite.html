@@ -82,11 +82,12 @@
     <p> <textarea name="feedbackForm" placeholder="Напишите отзыв (5 - 300 символов)"></textarea> </p>
     
     <!-- Отправить отзыв -->
-
+    
     <button class="button-green" name="SendMessageButton" onclick="sendFeedback('/api/messages')" disabled>
         Отправить
     </button>
-
+    <div id="feedbackStatus"></div>
+    
     <!-- Авторы -->
 
     <h2 style="color:rgb(40, 40, 250);">Создатель:</h2>
@@ -96,11 +97,20 @@
     <script>
         var text_container_name = "characterContainer";
         var textarea_name = 'feedbackForm';
+        var feedback_text_name = 'feedbackStatus';
+        //начало работы
         function start(){
             var feedback_is_sent = false;
             var text_area = document.getElementById(textarea_name)
-			DisableButtonState(true);
+            var feedback_area = document.getElementById(feedback_text_name);
+			ClearButtonStateChangeTo(false);
 		}
+        //функция для дебаггинга
+        function say(text_value){
+            console.log(text_value);
+            alert(text_value);
+        }
+        // получить результат от GET запроса, при генерации персонажа
         async function getResponce(response_url) {
             try {
                 const response = await fetch(response_url);
@@ -117,25 +127,27 @@
             } catch (error) {
                 characterText(`Произошла ошибка: ${error.message}`);
             }
-            DisableButtonState(false);
+            ClearButtonStateChangeTo(true);
         }
+        // отправить POST запрос на отправку отзыва о работе сайта
         async function sendFeedback(response_url) {
             const feedback = text_area.feedback.value;
             if (feedback.lenght < 5){
-                alert("Слишком короткое сообщение");
+                say("Слишком короткое сообщение");
+                
                 return;
             }
             else if (feedback.lenght > 300){
-                alert("Слишком длинное сообщение");
+                say("Слишком длинное сообщение");
                 return;
             }
 
-            //try {
+            try {
                 const response = await fetch('/api/messages', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'body': feedback
+                        'add': feedback
                     }
                 });
                 if (!response.ok) {
@@ -144,27 +156,26 @@
                 console.log('Отзыв отправлен');
                 text_area.feedback.value = '';
                 feedback_is_sent = true;
-            /*} catch (error) {
-                console.error('Error:', error);
-                alert('Произошла ошибка при отправке отзыва: ' + error);
-            }*/
+            } catch (error) {
+                say('Произошла ошибка при отправке отзыва: ' + error);
+            }
         }
 
         async function clearCharacter(){
             characterText("");
-            DisableButtonState(true);
         }
         async function characterText(value) {
             document.getElementById(text_container_name).innerHTML = value;
             console.log("text of output is changed:'" + value +  "'" )
             if (value == ""){
-                DisableButtonState(true);
-            }
-            else{
-                DisableButtonState(false);
+                ClearButtonStateChangeTo(false); //выключаем
+            } else {
+                ClearButtonStateChangeTo(true);
             }
         }
-        function DisableButtonState(state){ //state - bool of state
+        //функция, которая контролирует работу вкл/выкл кнопки очистки текста
+        function ClearButtonStateChangeTo(state){ 
+            //state - false: выключить кнопку, true: включить
             var clearButton = document.querySelector('button[name="clearCharacterButton"]');
                 
             if (state == true) {
@@ -174,6 +185,11 @@
                 clearButton.disabled = false;
                 clearButton.classList.remove('disabled');
             }
+        }
+
+        function feedbackText(value){
+            feedback_area.innerHTML = `<p> ${value} </p>`;
+            console.log("feedback status:'" + value +  "'" );
         }
         
         window.onload = start;
