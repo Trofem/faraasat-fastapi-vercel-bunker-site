@@ -138,7 +138,9 @@
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: `add=${feedback}`
+                    body: new URLSearchParams({
+                        add: feedback
+                    })
                 });
                 if (!response.ok) {
                     throw new Error('Failed to send feedback');
