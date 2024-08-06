@@ -7,18 +7,17 @@
     <style>
         body {
             background-color: #aac2f0;
-
         }
         .disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         button:active, button:focus {
-        border-color: gray;
-        box-shadow: 0 0 5px white;
+            border-color: gray;
+            box-shadow: 0 0 5px white;
         }
         button:active {
-        border-color: black;
+            border-color: black;
         }
         textarea {
             border: 5px solid;
@@ -39,162 +38,142 @@
             border-radius: 50px;
         }
         .button-red {
-			background: linear-gradient(to right, #ff1c1c, #ffa5a5); 
-        color: white;  padding: 5px 15px; border-radius: 25px;
+            background: linear-gradient(to right, #ff1c1c, #ffa5a5); 
+            color: white;  
+            padding: 5px 15px; 
+            border-radius: 25px;
         }
         .button-green {
-			background: linear-gradient(to right, #239c13, #6df85b); 
-        color: white;  padding: 5px 15px; border-radius: 25px;
+            background: linear-gradient(to right, #239c13, #6df85b); 
+            color: white;  
+            padding: 5px 15px; 
+            border-radius: 25px;
         }
-
     </style>
 </head>
 <body>
     <!-- Начальный текст -->
     <h2>Сайт по созданию персонажей для игры в бункер</h2>
-
     <p>На данном сайте, достаточно <b>нажать</b> на кнопку ниже и вы сможете получить сгенерированного персонажа. (В разработке)</p>
     <h2>Кнопка</h2>
-
     <!-- Кнопки генерации -->
-    <button class="button-blue" name="createCharacterButton" onclick="getResponce('/api/character')">
-        
+    <button class="button-blue" name="createCharacterButton" onclick="getResponse('/api/character')">
         Создать персонажа (случайного)
     </button>
-<p>
-    <button class="button-blue" name="createCharacterButton" onclick="getResponce('/api/bunker')">
-        
-        Создать характеристики бункера (случайного)
-    </button>
+    <p>
+        <button class="button-blue" name="createBunkerButton" onclick="getResponse('/api/bunker')">
+            Создать характеристики бункера (случайного)
+        </button>
     </p>
     <!-- Результат -->
     <h2>Результат</h2>
     <div id="characterContainer"></div>
-
     <!-- Кнопка очистка текста -->
     <button class="button-red" name="clearCharacterButton" onclick="clearCharacter()" disabled>
-    Очистить текст
-	</button>
-    
+        Очистить текст
+    </button>
     <!-- Текстовое поле отзыва о работе -->
-
     <h2>Отзыв о работе сайта</h2>
-    <p> <textarea name="feedbackForm" placeholder="Напишите отзыв (5 - 300 символов)"></textarea> </p>
-    
+    <p> 
+        <textarea id="feedbackForm" name="feedbackForm" placeholder="Напишите отзыв (5 - 300 символов)"></textarea>
+    </p>
     <!-- Отправить отзыв -->
-    
     <button class="button-green" name="SendMessageButton" onclick="sendFeedback('/api/messages')">
         Отправить
     </button>
     <div id="feedbackStatus"></div>
-    
     <!-- Авторы -->
-
     <h2 style="color:rgb(40, 40, 250);">Создатель:</h2>
     <a style="color:rgb(57, 57, 238);" href="https://github.com/Trofem/">Trofem</a>
-
     <!-- пост-скриптум (: -->
     <script>
         var text_container_name = "characterContainer";
         var textarea_name = 'feedbackForm';
         var feedback_text_name = 'feedbackStatus';
         var feedback_is_sent = false;
-        //начало работы
-        function start(){
-			ClearButtonStateChangeTo(false);
-            feedbackText(`не отправленно`);
-		}
-        //функция для дебаггинга
-        async function say(text_value){
+
+        // Начало работы
+        function start() {
+            ClearButtonStateChangeTo(false);
+            feedbackText('не отправлено');
+        }
+
+        // Функция для дебаггинга
+        async function say(text_value) {
             console.log(text_value);
             alert(text_value);
         }
-        // получить результат от GET запроса, при генерации персонажа
-        async function getResponce(response_url) {
+
+        // Получить результат от GET запроса, при генерации персонажа
+        async function getResponse(response_url) {
             try {
                 const response = await fetch(response_url);
                 if (!response.ok) {
-                    throw new Error(`
-                    <body>
-                    <p><ins>Ошибка сети при получении данных.</ins></p>
-                    <p><ins>Сообщите создателю (response ${response_url} is not ok).</ins></p>
-                    </body>
-                    `);
+                    throw new Error(`Ошибка сети при получении данных. Сообщите создателю (response ${response_url} is not ok).`);
                 }
                 const characterHtml = await response.text();
                 characterText(characterHtml);
-                
             } catch (error) {
                 characterText(`Произошла ошибка: ${error.message}`);
             }
             ClearButtonStateChangeTo(true);
         }
-        // отправить POST запрос на отправку отзыва о работе сайта
+
+        // Отправить POST запрос на отправку отзыва о работе сайта
         async function sendFeedback(response_url) {
-            feedbackText(`отправляем...`);
-            const feedback = document.getElementById(textarea_name).feedback.value;
-            if (feedback.lenght < 5){
+            feedbackText('отправляем...');
+            const feedback = document.getElementById(textarea_name).value;
+            if (feedback.length < 5) {
                 feedbackText("Слишком короткое сообщение");
-                
                 return;
-            }
-            else if (feedback.lenght > 300){
+            } else if (feedback.length > 300) {
                 feedbackText("Слишком длинное сообщение");
                 return;
             }
-            
+
             try {
                 feedbackText("пытаемся отправить...");
-                const response = await fetch('/api/messages', {
+                const response = await fetch(response_url, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'add': feedback
-                    }
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `feedback=${encodeURIComponent(feedback)}`
                 });
                 if (!response.ok) {
                     throw new Error('Failed to send feedback');
                 }
                 feedbackText('Отзыв отправлен!');
-                feedback.value = '';
+                document.getElementById(textarea_name).value = '';
                 feedback_is_sent = true;
             } catch (error) {
-                feedbackText('Произошла ошибка при отправке отзыва: ' + error)
+                feedbackText('Произошла ошибка при отправке отзыва: ' + error.message);
             }
-            feedback.value = "";
         }
 
-        async function clearCharacter(){
-            characterText("");
+        async function clearCharacter() {
+            characterText('');
         }
+
         async function characterText(value) {
             document.getElementById(text_container_name).innerHTML = value;
-            console.log("text of output is changed:'" + value +  "'" )
-            if (value == ""){
-                ClearButtonStateChangeTo(false); //выключаем
+            if (value === '') {
+                ClearButtonStateChangeTo(false);
             } else {
                 ClearButtonStateChangeTo(true);
             }
         }
-        //функция, которая контролирует работу вкл/выкл кнопки очистки текста
-        function ClearButtonStateChangeTo(state){ 
-            //state - false: выключить кнопку, true: включить
+
+        function ClearButtonStateChangeTo(state) {
             var clearButton = document.querySelector('button[name="clearCharacterButton"]');
-                
-            if (state == false) {
-                clearButton.disabled = true;
-                clearButton.classList.add('disabled');
-            } else {
-                clearButton.disabled = false;
-                clearButton.classList.remove('disabled');
-            }
+            clearButton.disabled = !state;
+            clearButton.classList.toggle('disabled', !state);
         }
 
-        async function feedbackText(value){
-            document.getElementById(feedback_text_name).innerHTML = `<p> статус отправки: ${value} <p>`;
-            console.log("feedback status:'" + value +  "'" );
+        async function feedbackText(value) {
+            document.getElementById(feedback_text_name).innerHTML = `<p>статус отправки: ${value}</p>`;
         }
-        
+
         window.onload = start;
     </script>
 </body>
