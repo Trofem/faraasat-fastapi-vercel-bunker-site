@@ -99,9 +99,9 @@
         var textarea_name = 'feedbackForm';
         var feedback_text_name = 'feedbackStatus';
         var feedback_is_sent = false;
-        var text_area = document.getElementById(textarea_name);
         //начало работы
         function start(){
+            var text_area = document.getElementById(textarea_name);
 			ClearButtonStateChangeTo(false);
             feedbackText(`не отправленно`);
 		}
