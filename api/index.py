@@ -50,8 +50,10 @@ async def r_add(request: Request):
 
 @app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
-    print("try access to messages throught post")
-    if 'add' in request.headers:
+    adding_to_list_messages:bool = 'add' in request.headers
+    print(f"try access to messages throught post that {("will" if adding_to_list_messages else "wont (strange)")} added.")
+    
+    if adding_to_list_messages:
         form_data = await request.form()
         message = form_data.get('add').replace("\n","  ")
         print(f"api messages post ={message}")

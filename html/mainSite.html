@@ -138,7 +138,7 @@
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: `feedback=${encodeURIComponent(feedback)}`
+                    body: `add=${encodeURIComponent(feedback)}`
                 });
                 if (!response.ok) {
                     throw new Error('Failed to send feedback');
