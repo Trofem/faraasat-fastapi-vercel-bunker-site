@@ -37,7 +37,7 @@ async def favicon():
 @app.get("/api/messages")   # GET  <host>/messages?add=value to add message
 async def r_add(request: Request):
     params = request.query_params
-
+    print("try access to messages throught get")
     if 'add' in params:
         message = str(params['add'])
         print(f"api messages get ={message}")
@@ -50,6 +50,7 @@ async def r_add(request: Request):
 
 @app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
+    print("try access to messages throught post")
     if 'add' in request.headers:
         form_data = await request.form()
         message = form_data.get('add').replace("\n","  ")

@@ -130,7 +130,7 @@
                 return;
             }
 
-            try {
+            //try {
                 const response = await fetch('/api/messages', {
                     method: 'POST',
                     headers: {
@@ -141,13 +141,13 @@
                 if (!response.ok) {
                     throw new Error('Failed to send feedback');
                 }
-                alert('Отзыв отправлен');
+                console.log('Отзыв отправлен');
                 text_area.feedback.value = '';
                 feedback_is_sent = true;
-            } catch (error) {
+            /*} catch (error) {
                 console.error('Error:', error);
                 alert('Произошла ошибка при отправке отзыва: ' + error);
-            }
+            }*/
         }
 
         async function clearCharacter(){
@@ -156,6 +156,7 @@
         }
         async function characterText(value) {
             document.getElementById(text_container_name).innerHTML = value;
+            console.log("text of output is changed:'" + value +  "'" )
             if (value == ""){
                 DisableButtonState(true);
             }
