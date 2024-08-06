@@ -101,7 +101,6 @@
         var feedback_is_sent = false;
         //начало работы
         function start(){
-            var text_area = document.getElementById(textarea_name);
 			ClearButtonStateChangeTo(false);
             feedbackText(`не отправленно`);
 		}
@@ -131,14 +130,9 @@
             ClearButtonStateChangeTo(true);
         }
         // отправить POST запрос на отправку отзыва о работе сайта
-
-        async function test() {
-            feedbackText(`измененно`);
-            feedback.value = "you cannot beat us";
-        }
         async function sendFeedback(response_url) {
             feedbackText(`отправляем...`);
-            const feedback = text_area.feedback.value;
+            const feedback = document.getElementById(textarea_name).feedback.value;
             if (feedback.lenght < 5){
                 feedbackText("Слишком короткое сообщение");
                 
