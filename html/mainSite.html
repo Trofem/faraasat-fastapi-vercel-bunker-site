@@ -83,7 +83,7 @@
     
     <!-- Отправить отзыв -->
     
-    <button class="button-green" name="SendMessageButton" onclick="sendFeedback('/api/messages')" disabled>
+    <button class="button-green" name="SendMessageButton" onclick="sendFeedback('/api/messages')">
         Отправить
     </button>
     <div id="feedbackStatus"></div>
@@ -102,11 +102,12 @@
         function start(){
             var feedback_is_sent = false;
             var text_area = document.getElementById(textarea_name)
-            var feedback_area = document.getElementById(feedback_text_name);
+
 			ClearButtonStateChangeTo(false);
+            feedbackText(`Работает`);
 		}
         //функция для дебаггинга
-        function say(text_value){
+        async function say(text_value){
             console.log(text_value);
             alert(text_value);
         }
@@ -124,25 +125,34 @@
                 }
                 const characterHtml = await response.text();
                 characterText(characterHtml);
+                
             } catch (error) {
                 characterText(`Произошла ошибка: ${error.message}`);
             }
             ClearButtonStateChangeTo(true);
         }
         // отправить POST запрос на отправку отзыва о работе сайта
+
+        async function test() {
+            feedbackText(`измененно`);
+            feedback.value = "you cannot beat us";
+        }
         async function sendFeedback(response_url) {
+            feedbackText(`отправляем...`);
+            feedback.value = "lol";
             const feedback = text_area.feedback.value;
             if (feedback.lenght < 5){
-                say("Слишком короткое сообщение");
+                feedbackText("Слишком короткое сообщение");
                 
                 return;
             }
             else if (feedback.lenght > 300){
-                say("Слишком длинное сообщение");
+                feedbackText("Слишком длинное сообщение");
                 return;
             }
 
             try {
+                feedbackText("пытаемся отправить...");
                 const response = await fetch('/api/messages', {
                     method: 'POST',
                     headers: {
@@ -153,11 +163,11 @@
                 if (!response.ok) {
                     throw new Error('Failed to send feedback');
                 }
-                console.log('Отзыв отправлен');
-                text_area.feedback.value = '';
+                feedbackText('Отзыв отправлен!');
+                feedback.value = '';
                 feedback_is_sent = true;
             } catch (error) {
-                say('Произошла ошибка при отправке отзыва: ' + error);
+                feedbackText('Произошла ошибка при отправке отзыва: ' + error)
             }
         }
 
@@ -178,7 +188,7 @@
             //state - false: выключить кнопку, true: включить
             var clearButton = document.querySelector('button[name="clearCharacterButton"]');
                 
-            if (state == true) {
+            if (state == false) {
                 clearButton.disabled = true;
                 clearButton.classList.add('disabled');
             } else {
@@ -187,8 +197,8 @@
             }
         }
 
-        function feedbackText(value){
-            feedback_area.innerHTML = `<p> ${value} </p>`;
+        async function feedbackText(value){
+            document.getElementById(feedback_text_name).innerHTML = `<p> статус отправки: ${value} <p>`;
             console.log("feedback status:'" + value +  "'" );
         }
         
