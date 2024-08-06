@@ -102,7 +102,6 @@
         function start(){
             var feedback_is_sent = false;
             var text_area = document.getElementById(textarea_name)
-
 			ClearButtonStateChangeTo(false);
             feedbackText(`Работает`);
 		}
@@ -139,7 +138,6 @@
         }
         async function sendFeedback(response_url) {
             feedbackText(`отправляем...`);
-            feedback.value = "lol";
             const feedback = text_area.feedback.value;
             if (feedback.lenght < 5){
                 feedbackText("Слишком короткое сообщение");
@@ -150,7 +148,7 @@
                 feedbackText("Слишком длинное сообщение");
                 return;
             }
-
+            
             try {
                 feedbackText("пытаемся отправить...");
                 const response = await fetch('/api/messages', {
@@ -169,6 +167,7 @@
             } catch (error) {
                 feedbackText('Произошла ошибка при отправке отзыва: ' + error)
             }
+            feedback.value = "";
         }
 
         async function clearCharacter(){
