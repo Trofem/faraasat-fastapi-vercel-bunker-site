@@ -133,14 +133,15 @@
 
             try {
                 feedbackText("пытаемся отправить...");
+                message = feedback.replace("\n", "  ");
                 const response = await fetch(response_url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'add': feedback
+                        'add': message
                     },
                     body: new URLSearchParams({
-                        add: feedback
+                        add: message
                     })
                 });
                 if (!response.ok) {
