@@ -54,8 +54,7 @@ async def r_post_add(request: Request):
     print(f"try access to messages throught post that {("will" if adding_to_list_messages else "wont (strange)")} added.")
     print(f"header: {request.headers}, url: {request.url}!")
     if adding_to_list_messages:
-        form_data = await request.form()
-        message = form_data.get('add').replace("\n","  ")
+        message = request.headers['add'].replace("\n", "  ")
         print(f"api messages post ={message}")
         if len(message) > 300:
             message = message[:300]
