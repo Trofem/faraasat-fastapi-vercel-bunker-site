@@ -136,7 +136,8 @@
                 const response = await fetch(response_url, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'add': feedback
                     },
                     body: new URLSearchParams({
                         add: feedback
