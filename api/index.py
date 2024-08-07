@@ -3,6 +3,7 @@ from fastapi import FastAPI, Request
 from sys import version as python_formatted_version
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from datetime import datetime, timedelta
+import urllib.parse
 from .bunkergame import *
 import redis
 
@@ -39,7 +40,7 @@ async def r_add(request: Request):
     params = request.query_params
     print("try access to messages throught get")
     if 'add' in params:
-        message = str(params['add'])
+        message = params['add'].replace("\n", "  ")
         print(f"api messages get ={message}")
         if len(message) > 300:
             message = message[:300]
@@ -54,7 +55,8 @@ async def r_post_add(request: Request):
     print(f"try access to messages throught post that {("will" if adding_to_list_messages else "wont (strange)")} added.")
     print(f"header: {request.headers}, url: {request.url}!")
     if adding_to_list_messages:
-        message = request.headers['add'].replace("\n", "  ")
+        message = urllib.parse.unquote(request.headers['add'])
+        message = message.replace("\n", "  ")
         print(f"api messages post ={message}")
         if len(message) > 300:
             message = message[:300]
