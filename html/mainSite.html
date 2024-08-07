@@ -131,28 +131,28 @@
                 return;
             }
 
-            try {
-                feedbackText("пытаемся отправить...");
-                message = encodeURIComponent(feedback.replace("\n", "  "));
-                const response = await fetch(response_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'add': message
-                    },
-                    body: new URLSearchParams({
-                        add: message
-                    })
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to send feedback');
-                }
-                feedbackText('Отзыв отправлен!');
-                document.getElementById(textarea_name).value = '';
-                feedback_is_sent = true;
-            } catch (error) {
-                feedbackText('Произошла ошибка при отправке отзыва: ' + error.message);
+            //try {
+            feedbackText("пытаемся отправить...");
+            message = encodeURIComponent(feedback.replace("\n", "  "));
+            const response = await fetch(response_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'add': message
+                },
+                body: new URLSearchParams({
+                    add: message
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to send feedback');
             }
+            feedbackText('Отзыв отправлен!');
+            document.getElementById(textarea_name).value = '';
+            feedback_is_sent = true;
+            //} catch (error) {
+            //    feedbackText('Произошла ошибка при отправке отзыва: ' + error.message);
+            //}
         }
 
         async function clearCharacter() {
