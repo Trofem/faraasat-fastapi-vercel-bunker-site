@@ -75,7 +75,7 @@
     <!-- Текстовое поле отзыва о работе -->
     <h2>Отзыв о работе сайта</h2>
     <p> 
-        <textarea id="feedbackForm" name="feedbackForm" placeholder="Напишите отзыв (5 - 300 символов)"></textarea>
+        <textarea id="feedbackForm" name="feedbackForm" placeholder="Напишите отзыв (5 - 300 символов) (только 1 раз)"></textarea>
     </p>
     <!-- Отправить отзыв -->
     <button class="button-green" name="SendMessageButton" onclick="sendFeedback('/api/messages')">
@@ -123,7 +123,11 @@
         async function sendFeedback(response_url) {
             feedbackText('отправляем...');
             const feedback = document.getElementById(textarea_name).value;
-            if (feedback.length < 5) {
+            if (feedback_is_sent){
+                feedbackText("Вы уже отправляли отзыв!");
+                return;
+            }
+            else if (feedback.length < 5) {
                 feedbackText("Слишком короткое сообщение");
                 return;
             } else if (feedback.length > 300) {
@@ -131,28 +135,28 @@
                 return;
             }
 
-            //try {
-            feedbackText("пытаемся отправить...");
-            message = encodeURIComponent(feedback.replace("\n", "  "));
-            const response = await fetch(response_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'add': message
-                },
-                body: new URLSearchParams({
-                    add: message
-                })
-            });
-            if (!response.ok) {
-                throw new Error('Failed to send feedback');
+            try {
+                feedbackText("пытаемся отправить...");
+                message = encodeURIComponent(feedback.replace("\n", "  "));
+                const response = await fetch(response_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'add': message
+                    },
+                    body: new URLSearchParams({
+                        add: message
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to send feedback');
+                }
+                feedbackText('Отзыв отправлен!');
+                document.getElementById(textarea_name).value = '';
+                feedback_is_sent = true;
+            } catch (error) {
+                feedbackText('Произошла ошибка при отправке отзыва: ' + error.message);
             }
-            feedbackText('Отзыв отправлен!');
-            document.getElementById(textarea_name).value = '';
-            feedback_is_sent = true;
-            //} catch (error) {
-            //    feedbackText('Произошла ошибка при отправке отзыва: ' + error.message);
-            //}
         }
 
         async function clearCharacter() {

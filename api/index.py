@@ -15,6 +15,8 @@ KV_USERNAME = os.environ.get('KV_USERNAME')
 KV_PASS = os.environ.get('KV_PASS')
 KV_HOST = os.environ.get('KV_HOST')
 KV_PORT = os.environ.get('KV_PORT')
+KV_TELEGRAM_TOKEN = os.environ.get('KV_TELEGRAM_TOKEN')
+
 
 r = redis.Redis(
     host=KV_HOST,
@@ -23,6 +25,20 @@ r = redis.Redis(
     password=KV_PASS,
     ssl=True
 )
+
+def get_token() -> str:
+    return KV_TELEGRAM_TOKEN
+
+def get_feedbacks() -> str:
+    for i in r.lrange('list_messages',0,51):
+
+        message = i.decode("utf-8")
+        index_separation = message.find("::")
+        yield f"""{{"user": "{ message[ :index_separation ] }", "message": "{message[index_separation+2:]}"}}""" if index_separation != -1 else "old!!"
+
+
+
+
 
 @app.get("/date")
 async def root():
@@ -44,7 +60,7 @@ async def r_add(request: Request):
         print(f"api messages get ={message}")
         if len(message) > 300:
             message = message[:300]
-        r.lpush('list_messages', str(message))  # insert at list begin
+        r.lpush('list_messages', f'{message}')  # insert at list begin
         r.ltrim('list_messages', 0, 50) # save only first x elements
 
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
@@ -60,7 +76,7 @@ async def r_post_add(request: Request):
         print(f"api messages post ={message}")
         if len(message) > 300:
             message = message[:300]
-        r.lpush('list_messages', str(message))  # insert at list begin
+        r.lpush('list_messages', f'user: {request.headers["user-agent"]}, message: {message}')  # insert at list begin
         r.ltrim('list_messages', 0, 50) # save only first x elements
     return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
 
