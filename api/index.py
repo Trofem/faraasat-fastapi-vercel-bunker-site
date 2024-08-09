@@ -33,12 +33,12 @@ def get_token() -> str:
 def get_feedbacks() -> str:
     return {"messages" : [i.decode("utf-8") for i in r.lrange('list_message',0,51)]}
 
-async def get_data() -> str:
-    return json.dumps( {"datetime": datetime.utcnow()+timedelta(hours=11)} )
+#async def get_data() -> str:
+    #return json.dumps( {"datetime": datetime.utcnow()+timedelta(hours=11)} )
 
 @app.get("/date")
 async def root():
-    return get_data()   # make GMT+11
+    return json.dumps( {"datetime": datetime.utcnow()+timedelta(hours=11)} )  # make GMT+11
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
