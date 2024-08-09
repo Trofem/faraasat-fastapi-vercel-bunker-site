@@ -52,25 +52,25 @@ async def r_add(request: Request):
         print(f"api messages get ={message}")
         if len(message) > 300:
             message = message[:300]
-        r.lpush('list_messages', f'{message}')  # insert at list begin
-        r.ltrim('list_messages', 0, 50) # save only first x elements
+        r.lpush('list_message', f'{message}')  # insert at list begin
+        r.ltrim('list_message', 0, 50) # save only first x elements
 
-    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
+    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_message',0,51)] }    
 
 @app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
-    adding_to_list_messages:bool = 'add' in request.headers
-    print(f"try access to messages throught post that {("will" if adding_to_list_messages else "wont (strange)")} added.")
+    adding_to_list_message:bool = 'add' in request.headers
+    print(f"try access to messages throught post that {("will" if adding_to_list_message else "wont (strange)")} added.")
     print(f"header: {request.headers}, url: {request.url}!")
-    if adding_to_list_messages:
+    if adding_to_list_message:
         message = urllib.parse.unquote(request.headers['add'])
         message = message.replace("\n", "  ")
         print(f"api messages post ={message}")
         if len(message) > 300:
             message = message[:300]
-        r.lpush('list_messages', f'user: {request.headers["user-agent"]}, message: {message}')  # insert at list begin
-        r.ltrim('list_messages', 0, 50) # save only first x elements
-    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_messages',0,51)] }    
+        r.lpush('list_message', f'user: {request.headers["user-agent"]}, message: {message}')  # insert at list begin
+        r.ltrim('list_message', 0, 50) # save only first x elements
+    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_message',0,51)] }    
 
 
 @app.get("/api/character") #GET random bunker character 
