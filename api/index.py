@@ -1,11 +1,12 @@
 import os
-from fastapi import FastAPI, Request
+import json
 from sys import version as python_formatted_version
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from datetime import datetime, timedelta
 import urllib.parse
-from .bunkergame import *
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 import redis
+from .bunkergame import *
 
 app = FastAPI()
 
@@ -30,18 +31,14 @@ def get_token() -> str:
     return KV_TELEGRAM_TOKEN
 
 def get_feedbacks() -> str:
-    for i in r.lrange('list_message',0,51):
+    return {"messages" : [i.decode("utf-8") for i in r.lrange('list_message',0,51)]}
 
-        message = i.decode("utf-8")
-        index_separation = message.find("::")
-        res =  f'''"user": { message[ :index_separation ] }, "message": {message[index_separation+2:]}''' if index_separation != -1 else 'old!!:' + message 
-        
-        yield res
-
+async def get_data() -> str:
+    return json.dumps( {"date": datetime.utcnow(), "time": timedelta(hours=11)} )
 
 @app.get("/date")
 async def root():
-    return f'{{"date": "{datetime.utcnow()}", "time": "{timedelta(hours=11)}"}}'   # make GMT+11
+    return get_data()   # make GMT+11
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
@@ -60,7 +57,7 @@ async def r_add(request: Request):
         r.lpush('list_message', f'{message}')  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
 
-    return {"messages" : list(get_feedbacks())}   
+    return get_feedbacks()  
 
 @app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
@@ -75,7 +72,6 @@ async def r_post_add(request: Request):
             message = message[:300]
         r.lpush('list_message', f'user: {request.headers["user-agent"]}, message: {message}')  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
-    return {"messages" : list(get_feedbacks())}   
 
 
 @app.get("/api/character") #GET random bunker character 
