@@ -38,7 +38,7 @@ def get_feedbacks() -> str:
 
 @app.get("/date")
 async def root():
-    return json.dumps( {"datetime": datetime.utcnow()+timedelta(hours=11)} )  # make GMT+11
+    return json.dumps( {"datetime": str(datetime.utcnow()+timedelta(hours=11))} )  # make GMT+11
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
