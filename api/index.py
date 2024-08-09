@@ -29,14 +29,6 @@ r = redis.Redis(
 def get_token() -> str:
     return KV_TELEGRAM_TOKEN
 
-def get_feedbacks() -> str:
-    for i in r.lrange('list_messages',0,51):
-
-        message = i.decode("utf-8")
-        index_separation = message.find("::")
-        yield f"""{{"user": "{ message[ :index_separation ] }", "message": "{message[index_separation+2:]}"}}""" if index_separation != -1 else "old!!"
-
-
 
 
 
