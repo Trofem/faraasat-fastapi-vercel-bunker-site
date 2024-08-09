@@ -34,7 +34,7 @@ def get_feedbacks() -> str:
     return {"messages" : [i.decode("utf-8") for i in r.lrange('list_message',0,51)]}
 
 async def get_data() -> str:
-    return json.dumps( {"datetime": format(datetime.utcnow()+timedelta(hours=11))} )
+    return json.dumps( {"datetime": datetime.utcnow()+timedelta(hours=11)} )
 
 @app.get("/date")
 async def root():
