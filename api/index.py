@@ -29,14 +29,19 @@ r = redis.Redis(
 def get_token() -> str:
     return KV_TELEGRAM_TOKEN
 
+def get_feedbacks() -> str:
+    for i in r.lrange('list_message',0,51):
 
+        message = i.decode("utf-8")
+        index_separation = message.find("::")
+        res =  f'''"user": { message[ :index_separation ] }, "message": {message[index_separation+2:]}''' if index_separation != -1 else 'old!!:' + message 
+        
+        yield res
 
 
 @app.get("/date")
 async def root():
-    return {
-        "GMT+11 time": format(datetime.utcnow()+timedelta(hours=11))
-        }    # make GMT+11
+    return f'{{"date": "{datetime.utcnow()}", "time": "{timedelta(hours=11)}"}}'   # make GMT+11
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
@@ -48,14 +53,14 @@ async def r_add(request: Request):
     params = request.query_params
     print("try access to messages throught get")
     if 'add' in params:
-        message = params['add'].replace("\n", "  ")
+        message = params['add']
         print(f"api messages get ={message}")
         if len(message) > 300:
             message = message[:300]
         r.lpush('list_message', f'{message}')  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
 
-    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_message',0,51)] }    
+    return {"messages" : list(get_feedbacks())}   
 
 @app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
@@ -70,7 +75,7 @@ async def r_post_add(request: Request):
             message = message[:300]
         r.lpush('list_message', f'user: {request.headers["user-agent"]}, message: {message}')  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
-    return {"redis_values": [i.decode("utf-8") for i in r.lrange('list_message',0,51)] }    
+    return {"messages" : list(get_feedbacks())}   
 
 
 @app.get("/api/character") #GET random bunker character 
