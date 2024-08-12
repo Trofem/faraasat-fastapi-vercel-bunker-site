@@ -28,7 +28,7 @@ r = redis.Redis(
     ssl=True
 )
 
-def get_token() -> str:
+def get_tg_token() -> str:
     return KV_TELEGRAM_TOKEN
 
 def get_feedbacks() -> str:
