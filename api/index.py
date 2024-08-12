@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 import redis
 from .bunkergame import *
+from .tgbot import send_telegram_message
 
 app = FastAPI()
 
@@ -33,12 +34,12 @@ def get_token() -> str:
 def get_feedbacks() -> str:
     return {"messages" : [i.decode("utf-8") for i in r.lrange('list_message',0,51)]}
 
-#async def get_data() -> str:
-    #return json.dumps( {"datetime": datetime.utcnow()+timedelta(hours=11)} )
+def get_date() -> str:
+    return JSONResponse( {"datetime": str(datetime.utcnow()+timedelta(hours=11)[:19])})
 
 @app.get("/date")
 async def root():
-    return JSONResponse( {"datetime": str(datetime.utcnow()+timedelta(hours=11))})  # make GMT+11
+    return get_date()  # make GMT+11
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
@@ -48,13 +49,10 @@ async def favicon():
 @app.get("/api/messages")   # GET  <host>/messages?add=value to add message
 async def r_add(request: Request):
     params = request.query_params
-    print("try access to messages throught get")
     if 'add' in params:
         message = params['add']
-        print(f"api messages get ={message}")
-        if len(message) > 300:
-            message = message[:300]
-        r.lpush('list_message', f'{message}')  # insert at list begin
+        print(f"api messages get: {message}")
+        r.lpush('list_message', JSONResponse({"message": {message}, "type": "handmade"}) )  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
 
     return get_feedbacks()  
@@ -67,11 +65,11 @@ async def r_post_add(request: Request):
     if adding_to_list_message:
         message = urllib.parse.unquote(request.headers['add'])
         message = message.replace("\n", "  ")
-        print(f"api messages post ={message}")
-        if len(message) > 300:
-            message = message[:300]
-        r.lpush('list_message', f'user: {request.headers["user-agent"]}, message: {message}')  # insert at list begin
+        print(f"api messages post: {message}")
+        r.lpush('list_message', JSONResponse({"user": {request.headers["user-agent"]}, "date": {get_date()}, "message": {message}, "type": "review"} ))  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
+        send_telegram_message(f"""Получен новый отзыв:\n{message}""")
+    return 200 if adding_to_list_message else 400  
 
 
 @app.get("/api/character") #GET random bunker character 
