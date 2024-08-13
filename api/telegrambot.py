@@ -15,6 +15,3 @@ def send_telegram_message(message):
         print("Message sent successfully")
     else:
         print("Failed to send message")
-
-if __name__ == "__main__":
-    send_telegram_message("Сервис отзыва запущен \U0001F480")
