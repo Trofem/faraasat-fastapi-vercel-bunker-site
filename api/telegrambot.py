@@ -1,9 +1,8 @@
-from api.index import get_tg_token
 import requests
 # \U0001F480 - 💀
 
 #variables (supposted to be hidden)
-telegram_bot_list:list[str] = get_tg_token().split(" ")
+telegram_bot_list:list[str] = os.environ.get('KV_TELEGRAM_TOKEN').split(" ")
 bot_token = telegram_bot_list[0]
 chat_id = telegram_bot_list[1]
 
