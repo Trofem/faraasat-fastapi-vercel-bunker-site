@@ -1,4 +1,4 @@
-from index import get_tg_token
+from .index import get_tg_token
 import requests
 # \U0001F480 - 💀
 
