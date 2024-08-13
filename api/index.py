@@ -6,8 +6,8 @@ import urllib.parse
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 import redis
-from .bunkergame import *
-from .telegrambot import send_telegram_message
+from api.bunkergame import *
+from api.telegrambot import send_telegram_message
 
 app = FastAPI()
 
