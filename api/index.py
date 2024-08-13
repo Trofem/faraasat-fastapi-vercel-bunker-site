@@ -17,7 +17,6 @@ KV_USERNAME = os.environ.get('KV_USERNAME')
 KV_PASS = os.environ.get('KV_PASS')
 KV_HOST = os.environ.get('KV_HOST')
 KV_PORT = os.environ.get('KV_PORT')
-KV_TELEGRAM_TOKEN = os.environ.get('KV_TELEGRAM_TOKEN')
 
 
 r = redis.Redis(
@@ -29,7 +28,7 @@ r = redis.Redis(
 )
 
 def get_tg_token() -> str:
-    return KV_TELEGRAM_TOKEN
+    return os.environ.get('KV_TELEGRAM_TOKEN')
 
 def get_feedbacks() -> str:
     return {"messages" : [i.decode("utf-8") for i in r.lrange('list_message',0,51)]}
