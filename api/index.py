@@ -1,5 +1,4 @@
-import os
-import json
+import os, requests, json
 from sys import version as python_formatted_version
 from datetime import datetime, timedelta
 import urllib.parse
@@ -7,7 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 import redis
 from api.bunkergame import *
-from api.telegrambot import send_telegram_message
+#from api.telegrambot import send_telegram_message
 
 app = FastAPI()
 
@@ -35,6 +34,21 @@ def get_feedbacks() -> str:
 
 def get_date() -> str:
     return JSONResponse( {"datetime": str(datetime.utcnow()+timedelta(hours=11)[:19])})
+
+# \U0001F480 - 💀
+telegram_bot_list:list[str] = os.environ.get('KV_TELEGRAM_TOKEN').split(" ")
+bot_token = telegram_bot_list[0]
+chat_id = telegram_bot_list[1]
+
+def send_telegram_message(message):
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    data = {"chat_id": chat_id, "text": message}
+    response = requests.post(url, json=data)
+    ...
+    if response.status_code == 200:
+        print("Message sent successfully")
+    else:
+        print("Failed to send message")
 
 @app.get("/date")
 async def root():
