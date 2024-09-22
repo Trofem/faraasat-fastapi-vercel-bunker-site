@@ -1,4 +1,4 @@
-import os, requests, json
+import os, requests, json, asyncio
 from sys import version as python_formatted_version
 from datetime import datetime, timedelta
 import urllib.parse
@@ -26,13 +26,13 @@ r = redis.Redis(
     ssl=True
 )
 
-def get_tg_token() -> str:
+async def get_tg_token() -> str:
     return os.environ.get('KV_TELEGRAM_TOKEN')
 
-def get_feedbacks() -> str:
+async def get_feedbacks() -> str:
     return {"messages" : [i.decode("utf-8") for i in r.lrange('list_message',0,51)]}
 
-def get_date() -> str:
+async def get_date() -> str:
     return JSONResponse( {"datetime": str(datetime.utcnow()+timedelta(hours=11)[:19])})
 
 # \U0001F480 - 💀
@@ -52,7 +52,7 @@ def send_telegram_message(message):
 
 @app.get("/date")
 async def root():
-    return get_date()  # make GMT+11
+    return await get_date()  # make GMT+11
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
@@ -68,7 +68,7 @@ async def r_add(request: Request):
         r.lpush('list_message', JSONResponse({"message": {message}, "type": "handmade"}) )  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
 
-    return get_feedbacks()  
+    return await get_feedbacks()  
 
 @app.post("/api/messages")   # POST
 async def r_post_add(request: Request):
@@ -79,7 +79,7 @@ async def r_post_add(request: Request):
         message = urllib.parse.unquote(request.headers['add'])
         message = message.replace("\n", "  ")
         print(f"api messages post: {message}")
-        r.lpush('list_message', JSONResponse({"user": {request.headers["user-agent"]}, "date": {get_date()}, "message": {message}, "type": "review"} ))  # insert at list begin
+        r.lpush('list_message', JSONResponse({"user": {request.headers["user-agent"]}, "date": {await get_date()}, "message": {message}, "type": "review"} ))  # insert at list begin
         r.ltrim('list_message', 0, 50) # save only first x elements
         send_telegram_message(f"""Получен новый отзыв:\n{message}""")
     return 200 if adding_to_list_message else 400  
